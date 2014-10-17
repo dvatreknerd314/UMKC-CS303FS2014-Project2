@@ -1,0 +1,6 @@
+David Allen:
+	- Implicit multiplication is not supported
+	- Decimals are not supported
+	- The minus sign works as either a binary operator or unary operator with very high precedence
+	- Prefix increment operator is not currently supported
+	- Checking for negative numbers and zeroes being in unfortunate positions is not checked in this part of the code.

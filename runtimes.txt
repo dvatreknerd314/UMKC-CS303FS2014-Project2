@@ -1,0 +1,5 @@
+David Allen:
+	SyntaxChecker::check_syntax(): O(n)
+	SyntaxChecker::check_binary_ops(): O(1)
+	SyntaxChecker::check_number(): O(1)
+	SyntaxChecker::SyntaxChecker(): O(1)

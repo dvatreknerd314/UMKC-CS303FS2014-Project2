@@ -29,7 +29,10 @@
 
 // Binary operators require two values on either side, syntax check will be similar
 
+#include <stdio.h>
+#include <iostream>
 #include "syntax_checker.h"
+using namespace std;
 
 SyntaxChecker::SyntaxChecker() {
 	the_status = NONE;
@@ -39,7 +42,7 @@ SyntaxChecker::SyntaxChecker() {
 
 bool SyntaxChecker::check_binary_ops(syntax_status& the_status) {
 	if (the_status != DIGIT) {
-		cout << "No valid left hand side argument for the " + " operator." << endl;
+		cout << "No valid left hand side argument for the " << " operator." << endl;
 		return 0;
 	}
 	working_on_number = 0;
@@ -116,7 +119,7 @@ bool SyntaxChecker::syntax_check(string the_input) {
 				}
 				// This handles situations in which there are no spaces but we start the == operator
 				else if (the_status == DIGIT) {
-					quanitity_before_equal = 1;
+					quantity_before_equal = 1;
 				}
 				// If we're in the latter half of the != operator
 				else if (the_status == NOT) {
@@ -201,7 +204,7 @@ bool SyntaxChecker::syntax_check(string the_input) {
 				break;
 		}
 	}
-	if (the_status != DIGIT) {
+	if (the_status != DIGIT && the_status != NONE) {
 		cout << "Missing right hand operand." << endl;
 		return 0;
 	}

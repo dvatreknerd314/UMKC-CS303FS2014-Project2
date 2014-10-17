@@ -1,10 +1,13 @@
 #ifndef SYNTAX_CHECKER_H
 #define SYNTAX_CHECKER_H
 
+#include <string>
+using namespace std;
+
 
 enum syntax_status {PLUS,MINUS,MULT,DIV,MOD,POWER,NOT,GT,GE,LT,LE,AND,OR,EQ,NE,NONE,DIGIT};
 
-class SyntaxChecker()
+class SyntaxChecker
 {
 	public:
 		SyntaxChecker();

@@ -11,7 +11,7 @@ Syntax Checking:
 9: No left-hand operand for the && operator
 10: No left-hand operand for the == operator
 11: No left-hand operand for the != operator
-12: === encountered
+12: == was not completed
 13: No left-hand operand for the < or <= operator
 14: No left-hand operand for the > or >= operator
 15: No left-hand operand for the ^ operator
@@ -19,3 +19,5 @@ Syntax Checking:
 17: No left-hand operand for the / operator
 18: No left-hand operand for the * operator
 19: No left-hand operand for the + operator
+20: && was not completed
+21: || was not completed

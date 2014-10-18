@@ -52,10 +52,10 @@ bool SyntaxChecker::check_binary_ops(syntax_status& the_status, char the_operato
 		case '&':
 		case '|':
 		case '=':
-			the_output = the_operator + the_operator;
+			the_output += the_operator + the_operator;
 			break;
 		default:
-			the_output = the_operator;
+			the_output += the_operator;
 		}
 		if (the_operator == ')') {
 			cout << "No valid expression contained within the parenthesis" << endl;
@@ -85,47 +85,92 @@ int SyntaxChecker::syntax_check(string the_input) {
 		switch (the_input[i]) {
 			case '+':
 				if (!check_binary_ops(the_status, the_input[i])) {return 19;}
+				the_error_code = multichar_token_unfinished(the_status);
+				if (the_error_code) {
+					cout << "Incomplete multi-character operator found." << endl;
+					return the_error_code;
+				}
 				the_status = PLUS;
 				break;
 			case '-':
 				the_status = MINUS;
+				the_error_code = multichar_token_unfinished(the_status);
+				if (the_error_code) {
+					cout << "Incomplete multi-character operator found." << endl;
+					return the_error_code;
+				}
 				break;
 			case '*':
 				if (!check_binary_ops(the_status, the_input[i])) {return 18;}
+				the_error_code = multichar_token_unfinished(the_status);
+				if (the_error_code) {
+					cout << "Incomplete multi-character operator found." << endl;
+					return the_error_code;
+				}
 				the_status = MULT;
 				break;
 			case '/':
 				if (!check_binary_ops(the_status, the_input[i])) {return 17;}
+				the_error_code = multichar_token_unfinished(the_status);
+				if (the_error_code) {
+					cout << "Incomplete multi-character operator found." << endl;
+					return the_error_code;
+				}
 				the_status = DIV;
 				working_on_number = 0;
 				space = 0;
 				break;
 			case '%':
 				if (!check_binary_ops(the_status, the_input[i])) {return 16;}
+				the_error_code = multichar_token_unfinished(the_status);
+				if (the_error_code) {
+					cout << "Incomplete multi-character operator found." << endl;
+					return the_error_code;
+				}
 				the_status = MOD;
 				working_on_number = 0;
 				space = 0;
 				break;
 			case '^':
 				if (!check_binary_ops(the_status, the_input[i])) {return 15;}
+				the_error_code = multichar_token_unfinished(the_status);
+				if (the_error_code) {
+					cout << "Incomplete multi-character operator found." << endl;
+					return the_error_code;
+				}
 				the_status = POWER;
 				working_on_number = 0;
 				space = 0;
 				break;
 			case '>':
 				if (!check_binary_ops(the_status, the_input[i])) {return 14;}
+				the_error_code = multichar_token_unfinished(the_status);
+				if (the_error_code) {
+					cout << "Incomplete multi-character operator found." << endl;
+					return the_error_code;
+				}
 				the_status = GT;
 				working_on_number = 0;
 				space = 0;
 				break;
 			case '<':
 				if (!check_binary_ops(the_status, the_input[i])) {return 13;}
+				the_error_code = multichar_token_unfinished(the_status);
+				if (the_error_code) {
+					cout << "Incomplete multi-character operator found." << endl;
+					return the_error_code;
+				}
 				the_status = LT;
 				working_on_number = 0;
 				space = 0;
 				break;
 			case '!':
 				// This sets a flag that distinguishes the NE operator from the NOT operator
+				the_error_code = multichar_token_unfinished(the_status);
+				if (the_error_code) {
+					cout << "Incomplete multi-character operator found." << endl;
+					return the_error_code;
+				}
 				working_on_number = 0;
 				space = 0;
 				if (the_status == DIGIT)
@@ -135,15 +180,16 @@ int SyntaxChecker::syntax_check(string the_input) {
 				the_status = NOT;
 				break;
 			case '=':
-				// If space is true, this begins a binary operator. Otherwise it may end a binary operator.
+				// Having a space before an equal sign forces the equal sign to start ==.
 				if (space) {
 					if (!check_binary_ops(the_status, the_input[i])) {return 10;}
 					// This lets the function know we have seen a beginning equal sign
-					quantity_before_equal = 1;
+					the_status = SINGLEEQ;
 				}
-				// This handles situations in which there are no spaces but we start the == operator
-				else if (the_status == DIGIT) {
-					quantity_before_equal = 1;
+				// The next four possibilities check for any operator that ends in =
+				// First is latter half of the == operator
+				else if (the_status == SINGLEEQ) {
+					the_status = EQ;
 				}
 				// If we're in the latter half of the != operator
 				else if (the_status == NOT) {
@@ -164,39 +210,41 @@ int SyntaxChecker::syntax_check(string the_input) {
 				else if (the_status == LT) {
 					the_status = LE;
 				}
-				// These last two statements make sure operands are present for the == operator
-				else if (quantity_before_equal) {
-					the_status = EQ;
-					!quantity_before_equal;
+				// These last two statements make sure operands are present for the == operator if there are no spaces
+				else if (check_binary_ops(the_status, the_input[i])) {
+					the_status = SINGLEEQ;
 				}
-				else {
-					cout << "Unrecognized token encountered: ===" << endl;
-					return 12;
-				}
+				else { return 10; }
+				space = 0;
 				break;
 			case '&':
-				if (begin_and) {
+				if (the_status == SINGLEAND) {
 					the_status = AND;
-					!begin_and;
 				}
 				else {
 					if (!check_binary_ops(the_status, the_input[i])) {return 9;}
-					!begin_and;
+					the_status = SINGLEAND;
 				}
 				break;
 			case '|':
-				if (begin_or) {
+				if (the_status == SINGLEOR) {
 					the_status = OR;
-					!begin_or;
 				}
 				else {
 					if (!check_binary_ops(the_status, the_input[i])) {return 8;}
-					!begin_or;
+					the_status = SINGLEOR;
 				}
 				break;
 			case ' ':
 				space = 1;
 				// Reset all multi-character token flags
+				
+				the_error_code = multichar_token_unfinished(the_status);
+				if (the_error_code) {
+					cout << "Incomplete multi-character operator found." << endl;
+					return the_error_code;
+				}
+				
 				working_on_number = quantity_before_not = quantity_before_equal = begin_or = begin_and = 0;
 				break;
 			case '0':
@@ -210,21 +258,35 @@ int SyntaxChecker::syntax_check(string the_input) {
 			case '8':
 			case '9':
 				if (!check_number(the_status, working_on_number)) {return 7;}
+				else {
+					the_error_code = multichar_token_unfinished(the_status);
+					if (the_error_code) {
+						cout << "Incomplete multi-character operator found." << endl;
+						return the_error_code;
+					}
+				}
 				working_on_number = 1;
 				the_status = DIGIT;
 				break;
 			case '(':
 				if (!check_number(the_status, working_on_number)) {return 6;}
+				else {
+					the_error_code = multichar_token_unfinished(the_status);
+					if (the_error_code) {
+						cout << "Incomplete multi-character operator found." << endl;
+						return the_error_code;
+					}
+				}
 				working_on_number = 0;
 				paren_count++;
 				break;
 			case ')':
-				if (!check_binary_ops(the_status, the_input[i])) {return 5;}
 				paren_count--;
 				if (paren_count < 0) {
 					cout << "Too many closing parenthesis." << endl;
 					return 4;
 				}
+				if (!check_binary_ops(the_status, the_input[i])) {return 5;}
 				break;
 			default:
 				cout << "Unrecognized token encountered: " << the_input[i] << endl;
@@ -244,6 +306,14 @@ int SyntaxChecker::syntax_check(string the_input) {
 
 void SyntaxChecker::reset_variables() {
 	the_status = NONE;
-	quantity_before_not = quantity_before_equal = working_on_number = begin_and = begin_or = paren_count = 0;
+	quantity_before_not = quantity_before_equal = working_on_number = begin_and = begin_or = paren_count = the_error_code = 0;
 	space = 1;
+}
+
+int SyntaxChecker::multichar_token_unfinished(syntax_status& the_status) {
+	int error_code = 0;
+	if (the_status == SINGLEEQ) { error_code = 12; }
+	else if (the_status == SINGLEAND) { error_code = 20; }
+	else if (the_status == SINGLEOR) { error_code = 21; }
+	return error_code;
 }

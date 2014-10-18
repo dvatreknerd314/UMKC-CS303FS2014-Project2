@@ -35,9 +35,7 @@
 using namespace std;
 
 SyntaxChecker::SyntaxChecker() {
-	the_status = NONE;
-	quantity_before_not = quantity_before_equal = working_on_number = begin_and = begin_or = paren_count = 0;
-	space = 1;
+	reset_variables();
 }
 
 bool SyntaxChecker::check_binary_ops(syntax_status& the_status) {
@@ -60,11 +58,15 @@ bool SyntaxChecker::check_number(syntax_status& the_status, bool working) {
 }
 
 bool SyntaxChecker::syntax_check(string the_input) {
+	reset_variables();
 	for (int i = 0; i < the_input.length(); i++) {
 		switch (the_input[i]) {
 			case '+':
 				if (!check_binary_ops(the_status)) {return 0;}
 				the_status = PLUS;
+				break;
+			case '-':
+				the_status = MINUS;
 				break;
 			case '*':
 				if (!check_binary_ops(the_status)) {return 0;}
@@ -213,4 +215,10 @@ bool SyntaxChecker::syntax_check(string the_input) {
 		return 0;
 	}
 	return 1;
+}
+
+void SyntaxChecker::reset_variables() {
+	the_status = NONE;
+	quantity_before_not = quantity_before_equal = working_on_number = begin_and = begin_or = paren_count = 0;
+	space = 1;
 }

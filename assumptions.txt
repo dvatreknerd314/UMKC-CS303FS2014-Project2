@@ -4,3 +4,5 @@ David Allen:
 	- The minus sign works as either a binary operator or unary operator with very high precedence
 	- Prefix increment operator is not currently supported
 	- Checking for negative numbers and zeroes being in unfortunate positions is not checked in this part of the code.
+	- Bitwise AND as well as bitwise OR are not supported.
+	- Multi-character tokens, such as milti-digit numbers, &&, ||, >=, <=, etc will be split up by spaces.

@@ -6,10 +6,13 @@ using namespace std;
 int main() {
 	string the_input;
 	ifstream test_file("test_input.txt");
-	getline(test_file, the_input);
-	test_file.close();
 	SyntaxChecker syntaxChecker;
-	syntaxChecker.syntax_check(the_input);
-	
+	while (!test_file.eof()) {
+		getline(test_file, the_input);
+		cout << "Evaluating " << the_input << " : ";
+		if (syntaxChecker.syntax_check(the_input))
+			cout << "No syntax problems" << endl;
+	}
+	test_file.close();
 	return 0;
 }

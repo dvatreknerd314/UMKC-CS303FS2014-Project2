@@ -11,7 +11,7 @@ class SyntaxChecker
 {
 	public:
 		SyntaxChecker();
-		bool syntax_check(string the_input);
+		int syntax_check(string the_input);
 	
 	private:
 		syntax_status the_status;
@@ -19,7 +19,7 @@ class SyntaxChecker
 		int paren_count;
 		
 		void reset_variables();
-		bool check_binary_ops(syntax_status& the_status);
+		bool check_binary_ops(syntax_status& the_status, char the_operator);
 		bool check_number(syntax_status& the_status, bool working);
 };
 

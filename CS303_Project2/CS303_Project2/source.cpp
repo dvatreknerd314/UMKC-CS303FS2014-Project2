@@ -10,7 +10,7 @@ int main() {
 	while (!test_file.eof()) {
 		getline(test_file, the_input);
 		cout << "Evaluating " << the_input << " : ";
-		if (syntaxChecker.syntax_check(the_input))
+		if (!syntaxChecker.syntax_check(the_input))
 			cout << "No syntax problems" << endl;
 	}
 	test_file.close();

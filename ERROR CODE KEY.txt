@@ -1,0 +1,21 @@
+Syntax Checking:
+0: No error
+1: Insufficient closing parenthesis
+2: No right-hand operand for last operator found
+3: Unrecognized token encountered
+4: Too many closing parenthesis
+5: Expression within parenthesis did not end in an operand
+6: No operator found between previous operand and opening parenthesis.
+7: No operator found between previous operand and digit.
+8: No left-hand operand for the || operator
+9: No left-hand operand for the && operator
+10: No left-hand operand for the == operator
+11: No left-hand operand for the != operator
+12: === encountered
+13: No left-hand operand for the < or <= operator
+14: No left-hand operand for the > or >= operator
+15: No left-hand operand for the ^ operator
+16: No left-hand operand for the % operator
+17: No left-hand operand for the / operator
+18: No left-hand operand for the * operator
+19: No left-hand operand for the + operator

@@ -38,9 +38,31 @@ SyntaxChecker::SyntaxChecker() {
 	reset_variables();
 }
 
-bool SyntaxChecker::check_binary_ops(syntax_status& the_status) {
+bool SyntaxChecker::check_binary_ops(syntax_status& the_status, char the_operator) {
 	if (the_status != DIGIT) {
-		cout << "No valid left hand side argument for the " << " operator." << endl;
+		string the_output = "";
+		switch (the_operator) {
+		case '<':
+			the_output = "< or <=";
+			break;
+		case '>':
+			the_output = "> or >=";
+			break;
+		case ')': break;
+		case '&':
+		case '|':
+		case '=':
+			the_output = the_operator + the_operator;
+			break;
+		default:
+			the_output = the_operator;
+		}
+		if (the_operator == ')') {
+			cout << "No valid expression contained within the parenthesis" << endl;
+		}
+		else {
+			cout << "No valid left hand side argument for the " << the_output << " operator." << endl;
+		}
 		return 0;
 	}
 	working_on_number = 0;
@@ -57,47 +79,47 @@ bool SyntaxChecker::check_number(syntax_status& the_status, bool working) {
 	return 1;
 }
 
-bool SyntaxChecker::syntax_check(string the_input) {
+int SyntaxChecker::syntax_check(string the_input) {
 	reset_variables();
 	for (int i = 0; i < the_input.length(); i++) {
 		switch (the_input[i]) {
 			case '+':
-				if (!check_binary_ops(the_status)) {return 0;}
+				if (!check_binary_ops(the_status, the_input[i])) {return 19;}
 				the_status = PLUS;
 				break;
 			case '-':
 				the_status = MINUS;
 				break;
 			case '*':
-				if (!check_binary_ops(the_status)) {return 0;}
+				if (!check_binary_ops(the_status, the_input[i])) {return 18;}
 				the_status = MULT;
 				break;
 			case '/':
-				if (!check_binary_ops(the_status)) {return 0;}
+				if (!check_binary_ops(the_status, the_input[i])) {return 17;}
 				the_status = DIV;
 				working_on_number = 0;
 				space = 0;
 				break;
 			case '%':
-				if (!check_binary_ops(the_status)) {return 0;}
+				if (!check_binary_ops(the_status, the_input[i])) {return 16;}
 				the_status = MOD;
 				working_on_number = 0;
 				space = 0;
 				break;
 			case '^':
-				if (!check_binary_ops(the_status)) {return 0;}
+				if (!check_binary_ops(the_status, the_input[i])) {return 15;}
 				the_status = POWER;
 				working_on_number = 0;
 				space = 0;
 				break;
 			case '>':
-				if (!check_binary_ops(the_status)) {return 0;}
+				if (!check_binary_ops(the_status, the_input[i])) {return 14;}
 				the_status = GT;
 				working_on_number = 0;
 				space = 0;
 				break;
 			case '<':
-				if (!check_binary_ops(the_status)) {return 0;}
+				if (!check_binary_ops(the_status, the_input[i])) {return 13;}
 				the_status = LT;
 				working_on_number = 0;
 				space = 0;
@@ -115,7 +137,7 @@ bool SyntaxChecker::syntax_check(string the_input) {
 			case '=':
 				// If space is true, this begins a binary operator. Otherwise it may end a binary operator.
 				if (space) {
-					if (!check_binary_ops(the_status)) {return 0;}
+					if (!check_binary_ops(the_status, the_input[i])) {return 10;}
 					// This lets the function know we have seen a beginning equal sign
 					quantity_before_equal = 1;
 				}
@@ -128,7 +150,7 @@ bool SyntaxChecker::syntax_check(string the_input) {
 					// Make sure we have necessary operators for the != operator
 					if (!quantity_before_not) {
 						cout << "No valid left hand side operand for the != operator." << endl;
-						exit(1);
+						return 11;
 					}
 					else {
 						the_status = NE;
@@ -148,8 +170,8 @@ bool SyntaxChecker::syntax_check(string the_input) {
 					!quantity_before_equal;
 				}
 				else {
-					cout << "No valid left hand side operand for the == operator." << endl;
-					exit(1);
+					cout << "Unrecognized token encountered: ===" << endl;
+					return 12;
 				}
 				break;
 			case '&':
@@ -158,7 +180,7 @@ bool SyntaxChecker::syntax_check(string the_input) {
 					!begin_and;
 				}
 				else {
-					if (!check_binary_ops(the_status)) {return 0;}
+					if (!check_binary_ops(the_status, the_input[i])) {return 9;}
 					!begin_and;
 				}
 				break;
@@ -168,7 +190,7 @@ bool SyntaxChecker::syntax_check(string the_input) {
 					!begin_or;
 				}
 				else {
-					if (!check_binary_ops(the_status)) {return 0;}
+					if (!check_binary_ops(the_status, the_input[i])) {return 8;}
 					!begin_or;
 				}
 				break;
@@ -187,34 +209,37 @@ bool SyntaxChecker::syntax_check(string the_input) {
 			case '7':
 			case '8':
 			case '9':
-				if (!check_number(the_status, working_on_number)) {return 0;}
+				if (!check_number(the_status, working_on_number)) {return 7;}
 				working_on_number = 1;
 				the_status = DIGIT;
 				break;
 			case '(':
-				if (!check_number(the_status, working_on_number)) {return 0;}
+				if (!check_number(the_status, working_on_number)) {return 6;}
 				working_on_number = 0;
 				paren_count++;
 				break;
 			case ')':
-				if (!check_binary_ops(the_status)) {return 0;}
+				if (!check_binary_ops(the_status, the_input[i])) {return 5;}
 				paren_count--;
 				if (paren_count < 0) {
 					cout << "Too many closing parenthesis." << endl;
-					exit(1);
+					return 4;
 				}
 				break;
+			default:
+				cout << "Unrecognized token encountered: " << the_input[i] << endl;
+				return 3;
 		}
 	}
 	if (the_status != DIGIT && the_status != NONE) {
 		cout << "Missing right hand operand." << endl;
-		return 0;
+		return 2;
 	}
 	else if (paren_count) {
 		cout << "Missing closing parenthesis." << endl;
-		return 0;
+		return 1;
 	}
-	return 1;
+	return 0;
 }
 
 void SyntaxChecker::reset_variables() {

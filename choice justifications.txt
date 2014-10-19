@@ -1,0 +1,20 @@
+David Allen:
+ - I chose to use a string for input in the function rather than an input stream to make it a bit easier to evaluate an entire expression
+ - I chose not to use String Tokenizer as it was rather limited in its abilities and I needed some extra functionality for encountering spaces.
+ - I chose to use an enum instead of an integer for marking the kinds of tokens processed as it was more intuitive to use than integers.
+ - I chose to include some token options for single =, &, and | for correct processing of the ==, &&, and || operators and to check if such operators were prematurely terminated by another token.
+ - I chose to make syntax_check() return a number instead of a boolean so we can check the error codes that individual expressions have returned to see if the syntax checker is catching the correct errors.
+ - I chose to have two functions for checking binary operators and numbers instead of individual functions for each operator because the binary operators all needed to be checked in a similar manner.
+ - I chose not to support implicit multiplication (such as 1(2/3) rather than 1 * (2/3) ) because it was a bit easier to impliment.
+ - Decimals are not supported as it would make the code a bit more complex, especially for evaluation.
+ - The syntax checker mainly looks only at the previous code because it is easier to parse an expression and I won't have to check to see if we're one below the end of the string.
+ - Parenthesis do not have tokens as they should not change the status of what came before them.  This makes it easier to determine if there are two numbers, parenthetical or otherwise, next to eachother with no operator between them, or to check to see that the last token inside a parenthetical expression is a number.
+ - I chose not to allow multi-character tokens to be internally separated by spaces as it doesn't make sense for a user to switch between using spaces throughout the expression and not doing so.
+ - Counting the parenthesis was a simple way of checking if they were balanced and correctly positioned.
+ - Using a boolean to check if there was a value before the ! character rather than using check_binary_ops() allowed me to gather the information in the event the program was looking at the beginning of !=.  If it wasn't, ! is a unary operator unconcerned with what came before it.
+ - Very little can go wrong with the - operator as it is both a unary operator (negation of a digit) and a binary operator (1 - 3).  This is why the only testing that occurs with the - operator is that it doesn't interrupt &&, ||, or ==.
+
+
+
+<Possibly Temporary>
+ - I chose not to support the ++ operator as we need to get the program working as is first.

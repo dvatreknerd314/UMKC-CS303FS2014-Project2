@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <iostream>
 #include "syntax_checker.h"
+#include <string>
 using namespace std;
 
 SyntaxChecker::SyntaxChecker() {
@@ -34,10 +35,13 @@ bool SyntaxChecker::check_binary_ops(syntax_status& the_status, char the_operato
 		case '|':
 		case '=':
 			// This should hopefully prevent the operator ascii values from being added
-			the_output += "" + the_operator + "" + the_operator;
+			the_output = "11";
+			the_output[0] = the_operator;
+			the_output[1] = the_operator;
 			break;
 		default:
-			the_output += "" + the_operator;
+			the_output = "[";
+			the_output[0] = the_operator;
 		}
 		// This is called to make sure we have a right hand operand or a single number within the parenthesis
 		if (the_operator == ')') {

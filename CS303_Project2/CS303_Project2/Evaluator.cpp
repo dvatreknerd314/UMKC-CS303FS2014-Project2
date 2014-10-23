@@ -1,10 +1,7 @@
 //Chase Peterson
 
-
-
-
 #include "Evaluator.h"
-#include "syntax_checker.h"
+
 #include <stack>
 
 //Assuming that none of the operands are more than 1 digit in length...
@@ -83,37 +80,38 @@ int process(int lhs, int rhs, char oper)
 
 int evaluate_expression(string& input)
 {
-	
+	SyntaxChecker check;
 	int rhs, lhs, result;
 	char oper;
 	stack<int> operands;
-	stack<char> operators;
+	stack<syntax_status> operators;
 
+	list<exprToken> expression;
 	
-	SyntaxChecker check;
-	if (check.syntax_check(input) != 0)
+	
+	if (check.syntax_check(input, expression) != 0)
 	{
 		return NULL; //if the input is invalid, don't return anything
 	}
+	
 
-	for (int i = 0; i < input.length(); i++) 
+	for (list<exprToken>::iterator itr = expression.begin(); itr != expression.end(); ++itr) 
 	{
 		//If it's a number push it on the operand stack
-		if (isOperand(input[i]))
+		if (isOperand(itr->number))
 		{
-			int ia = input[i] - '0';
-			operands.push(ia);
+			operands.push(itr->token);
 		}
 		//If it's an operator
-		else if (isOperator(input[i]))
+		else if (isOperator(itr->token))
 		{
 			//if there are none, push it onto the stack
 			if (operators.empty())
 			{
-				operators.push(input[i]);
+				operators.push(itr->token);
 			}
 			//if it's precedence is lower or equal to what's on top, process the last one
-			else if (precedence(input[i]) <= precedence(operators.top()))
+			else if (precedence(itr->token) <= precedence(operators.top()))
 			{
 				rhs = operands.top();
 				operands.pop();
@@ -122,21 +120,21 @@ int evaluate_expression(string& input)
 				operators.pop();
 				result = process(lhs, rhs, oper);
 				operands.push(result);
-				operators.push(input[i]);
+				operators.push(itr->token);
 			}
 			//if it's of higher precedence, push it on to be processed later
-			else if (precedence(input[i]) > precedence(operators.top()))
+			else if (precedence(itr->token) > precedence(operators.top()))
 			{
-				operators.push(input[i]);
+				operators.push(itr->token);
 			}
 		}
 		//it's an opening parenthesis, put it in operator stack
-		else if (isOpen(input[i]))
+		else if (isOpen(itr->token))
 		{
-			operators.push(input[i]);
+			operators.push(itr->token);
 		}
 		//It's a closing parenthesis, process until the last opening parenthesis
-		else if (isClose(input[i]))
+		else if (isClose(itr->token))
 		{
 			while (!isOpen(operators.top()))
 			{

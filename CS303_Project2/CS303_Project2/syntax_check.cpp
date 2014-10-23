@@ -70,11 +70,16 @@ bool SyntaxChecker::check_number(syntax_status& the_status, bool working) {
 	return 1;
 }
 
+// This is designed for testing whether syntax_check's error codes are right
+int SyntaxChecker::syntax_check(string the_input) { return syntax_check(the_input, new list<exprToken>); }
+
 // This function will go through all of the_input and check to see if it's a valid expression
 int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
-	// This makes sure all the variables needed for parsing are reset
+	// Temporary exprToken for adding to theList
 	exprToken tempToken;
+	// This makes sure all the variables needed for parsing are reset
 	reset_variables();
+	// Traverse the entire expression
 	for (int i = 0; i < the_input.length(); i++) {
 		switch (the_input[i]) {
 			case '+':
@@ -88,7 +93,10 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 					return the_error_code;
 				}
 				
-				// No problems were caused, set the status
+				// No problems were caused
+				
+				
+				// If we interrupted a number, add its exprToken to theList
 				if (currentNum >= 0) // No right parenthesis before this
 				{
 					tempToken.isANumber = true;
@@ -97,6 +105,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 					theList.push_back(tempToken);
 				}
 
+				// Set the_status
 				the_status = PLUS;
 				break;
 
@@ -112,6 +121,8 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 					return the_error_code;
 				}
 
+				// If we interrupted a number, add its exprToken to theList
+				// This means - is a binary operator in this instance
 				if (currentNum >= 0) // No right parenthesis before this
 				{
 					tempToken.isANumber = true;
@@ -119,6 +130,8 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 					currentNum = -1;
 					theList.push_back(tempToken);
 				}
+				// Check to see if we just completed an operator
+				// This means - is a unary operator in this instance
 				else if (the_status != NONE && the_status != DIGIT && the_input[i - 1] != '(')
 				{
 					tempToken.isANumber = false;
@@ -147,7 +160,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 					return the_error_code;
 				}
 				
-				// No problems were caused, set the status
+				// If we interrupted a number, add its exprToken to theList
 				if (currentNum >= 0) // No right parenthesis before this
 				{
 					tempToken.isANumber = true;
@@ -155,6 +168,8 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 					currentNum = -1;
 					theList.push_back(tempToken);
 				}
+				
+				// No problems were caused, set the status
 				the_status = MULT;
 				break;
 
@@ -173,7 +188,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 					return the_error_code;
 				}
 				
-				// No problems were caused, set the status
+				// If we interrupted a number, add its exprToken to theList
 				if (currentNum >= 0) // No right parenthesis before this
 				{
 					tempToken.isANumber = true;
@@ -181,6 +196,8 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 					currentNum = -1;
 					theList.push_back(tempToken);
 				}
+				
+				// Set the status
 				the_status = DIV;
 				break;
 
@@ -199,7 +216,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 					return the_error_code;
 				}
 				
-				// No problems were caused, set the status
+				// If we interrupted a number, add its exprToken to theList
 				if (currentNum >= 0) // No right parenthesis before this
 				{
 					tempToken.isANumber = true;
@@ -207,6 +224,8 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 					currentNum = -1;
 					theList.push_back(tempToken);
 				}
+				
+				// Set the status
 				the_status = MOD;
 				break;
 
@@ -224,7 +243,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 					return the_error_code;
 				}
 				
-				// No problems were caused, set the status
+				// If we interrupted a number, add its exprToken to theList
 				if (currentNum >= 0) // No right parenthesis before this
 				{
 					tempToken.isANumber = true;
@@ -232,6 +251,8 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 					currentNum = -1;
 					theList.push_back(tempToken);
 				}
+				
+				// Set the status
 				the_status = POWER;
 				break;
 
@@ -250,7 +271,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 					return the_error_code;
 				}
 				
-				// No problems were caused, set the status
+				// If we interrupted a number, add its exprToken to theList
 				if (currentNum >= 0) // No right parenthesis before this
 				{
 					tempToken.isANumber = true;
@@ -258,6 +279,8 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 					currentNum = -1;
 					theList.push_back(tempToken);
 				}
+				
+				// Set the status
 				the_status = GT;
 				break;
 
@@ -276,7 +299,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 					return the_error_code;
 				}
 				
-				// No problems were caused, set the status
+				// If we interrupted a number, add its exprToken to theList
 				if (currentNum >= 0) // No right parenthesis before this
 				{
 					tempToken.isANumber = true;
@@ -284,6 +307,8 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 					currentNum = -1;
 					theList.push_back(tempToken);
 				}
+				
+				// Set the status
 				the_status = LT;
 				break;
 
@@ -309,6 +334,8 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 				else
 					quantity_before_not = 0;
 
+				// If we interrupted a number, add its exprToken to theList
+				// This makes ! the beginning of !=
 				if (currentNum >= 0) // No right parenthesis before this
 				{
 					tempToken.isANumber = true;
@@ -316,6 +343,8 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 					currentNum = -1;
 					theList.push_back(tempToken);
 				}
+				/* Otherwise, add the previous operator's token to theList if there was
+				   a previously unadded operator */
 				else if (the_status != NONE && the_status != DIGIT && the_input[i - 1] != '(')
 				{
 					tempToken.isANumber = false;
@@ -365,6 +394,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 				}
 				// These last two statements make sure operands are present for the == operator if there are no spaces
 				else if (check_binary_ops(the_status, the_input[i])) {
+					// If we interrupted a number, add its exprToken to theList
 					if (currentNum >= 0) // No right parenthesis before this
 					{
 						tempToken.isANumber = true;
@@ -372,6 +402,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 						currentNum = -1;
 						theList.push_back(tempToken);
 					}
+					// Set the status
 					the_status = SINGLEEQ;
 				}
 				else { return 10; }
@@ -390,6 +421,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 				else {
 					// Return an error code for invalid LHS for && operator if such is true
 					if (!check_binary_ops(the_status, the_input[i])) {return 9;}
+					// If we interrupted a number, add its exprToken to theList
 					if (currentNum >= 0) // No right parenthesis before this
 					{
 						tempToken.isANumber = true;
@@ -397,6 +429,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 						currentNum = -1;
 						theList.push_back(tempToken);
 					}
+					// Set the status
 					the_status = SINGLEAND;
 				}
 				break;
@@ -413,6 +446,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 				else {
 					// Return an error code for invalid LHS for || operator if such is true
 					if (!check_binary_ops(the_status, the_input[i])) {return 8;}
+					// If we interrupted a number, add its exprToken to theList
 					if (currentNum >= 0) // No right parenthesis before this
 					{
 						tempToken.isANumber = true;
@@ -420,6 +454,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 						currentNum = -1;
 						theList.push_back(tempToken);
 					}
+					// Set the status
 					the_status = SINGLEOR;
 				}
 				break;
@@ -437,6 +472,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 					return the_error_code;
 				}
 
+				// If we interrupted a number, add its exprToken to theList
 				if (currentNum >= 0) // No right parenthesis before this
 				{
 					tempToken.isANumber = true;
@@ -474,6 +510,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 					}
 				}
 
+				// If we haven't added a previous operator to theList, do so
 				if (the_status != NONE && !working_on_number && the_input[i-1] != '(')
 				{
 					tempToken.isANumber = false;
@@ -509,6 +546,8 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 				// If working_on_number was for some reason not set to 0, do so
 				// UNNECCESSARY LINE MAYBE?
 				working_on_number = 0;
+				// If we're not starting the expression, we're definitely ending an operator,
+				// so add the operator to theList
 				if (the_status != NONE)
 				{
 					tempToken.isANumber = false;
@@ -516,6 +555,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 					theList.push_back(tempToken);
 				}
 
+				// Add the opening parenthesis to theList
 				tempToken.isANumber = false;
 				tempToken.token = LPAREN;
 				theList.push_back(tempToken);
@@ -539,6 +579,8 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 				// Return an error code for invalid end of enclosed expression if such is true
 				// This will also error if we have an incomplete dual character operator
 				if (!check_binary_ops(the_status, the_input[i])) {return 5;}
+				
+				// If we interrupted a number, add its exprToken to theList
 				if (currentNum >= 0) // No right parenthesis before this
 				{
 					tempToken.isANumber = true;
@@ -546,6 +588,8 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 					currentNum = -1;
 					theList.push_back(tempToken);
 				}
+				
+				// Add the closing parenthesis to the list
 				tempToken.isANumber = false;
 				tempToken.token = RPAREN;
 				theList.push_back(tempToken);
@@ -570,6 +614,8 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 		return 1;
 	}
 
+	// If our last token was a number and not a closing parenthesis, add the
+	// number to theList
 	if (currentNum >= 0) // No right parenthesis before this
 	{
 		tempToken.isANumber = true;

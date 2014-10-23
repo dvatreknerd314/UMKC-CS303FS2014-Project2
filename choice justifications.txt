@@ -13,8 +13,9 @@ David Allen:
  - Counting the parenthesis was a simple way of checking if they were balanced and correctly positioned.
  - Using a boolean to check if there was a value before the ! character rather than using check_binary_ops() allowed me to gather the information in the event the program was looking at the beginning of !=.  If it wasn't, ! is a unary operator unconcerned with what came before it.
  - Very little can go wrong with the - operator as it is both a unary operator (negation of a digit) and a binary operator (1 - 3).  This is why the only testing that occurs with the - operator is that it doesn't interrupt &&, ||, or ==.
-
-
+ - I defined a struct named exprToken that contained a union and a boolean in order to store two data types in a list (those being an enum and an integer).
+- I had syntax_check() modify a referenced list of exprTokens to make evaluating the expression much easier.
+- I created an overloaded syntax_check() function which took only the string and called the main syntax_check() function but passed a new list into the second parameter.  This was done for situations in which we don't need the token list, such as debugging the error codes.
 
 <Possibly Temporary>
  - I chose not to support the ++ operator as we need to get the program working as is first.

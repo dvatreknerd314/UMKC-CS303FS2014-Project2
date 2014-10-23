@@ -6,23 +6,27 @@
 #include "Constants.h"
 using namespace std;
 
-// exprToken uses a union data type, which I will try to explain below:
-
-/********* UNION DATA TYPE ************
-
-	A union data type is such that it can be used as many other data types,
-	but only one specific type at a time.
-
-
+/* This struct is set up as follows:
+  bool isANumber:
+  	Tells whether a particular instance of an exprToken should
+  	be accessed as an int or a syntax_status
+  union:
+  	Allows exprToken to work as both an int and a syntax_status
+  string toString():
+  	Converts the current exprToken into a string.  If anyone
+	knows of a way to output the name of an enumerated type
+	in C++ please let me know! 
 */
-
-
 struct exprToken {
+	// Should we access this as an int or a syntax_status
 	bool isANumber;
+	
 	union {
 		int number;
 		syntax_status token;
 	};
+	
+	// Convert to string function
 	string toString() {
 		if (isANumber)
 			return to_string(number);
@@ -62,6 +66,7 @@ class SyntaxChecker
 	public:
 		SyntaxChecker();
 		int syntax_check(string the_input, list<exprToken>& theList);
+		int syntax_check(string the_input);
 	
 	private:
 		syntax_status the_status;

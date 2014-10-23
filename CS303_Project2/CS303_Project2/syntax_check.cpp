@@ -11,6 +11,7 @@
 #include <iostream>
 #include "syntax_checker.h"
 #include <string>
+#include <list>
 using namespace std;
 
 SyntaxChecker::SyntaxChecker() {
@@ -70,8 +71,9 @@ bool SyntaxChecker::check_number(syntax_status& the_status, bool working) {
 }
 
 // This function will go through all of the_input and check to see if it's a valid expression
-int SyntaxChecker::syntax_check(string the_input) {
+int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 	// This makes sure all the variables needed for parsing are reset
+	exprToken tempToken;
 	reset_variables();
 	for (int i = 0; i < the_input.length(); i++) {
 		switch (the_input[i]) {
@@ -87,8 +89,21 @@ int SyntaxChecker::syntax_check(string the_input) {
 				}
 				
 				// No problems were caused, set the status
+				if (currentNum >= 0) // No right parenthesis before this
+				{
+					tempToken.isANumber = true;
+					tempToken.number = currentNum;
+					currentNum = -1;
+					theList.push_back(tempToken);
+				}
+
 				the_status = PLUS;
 				break;
+
+
+
+
+
 			case '-':
 				// This checks to see if - is interrputing &&, ==, or ||
 				the_error_code = multichar_token_unfinished(the_status);
@@ -96,10 +111,31 @@ int SyntaxChecker::syntax_check(string the_input) {
 					cout << "Incomplete multi-character operator found." << endl;
 					return the_error_code;
 				}
+
+				if (currentNum >= 0) // No right parenthesis before this
+				{
+					tempToken.isANumber = true;
+					tempToken.number = currentNum;
+					currentNum = -1;
+					theList.push_back(tempToken);
+				}
+				else if (the_status != NONE && the_status != DIGIT && the_input[i - 1] != '(')
+				{
+					tempToken.isANumber = false;
+					tempToken.token = the_status;
+					theList.push_back(tempToken);
+				}
 				
 				// No problems were caused, set the status
+				working_on_number = 0;
+				space = 0;
 				the_status = MINUS;
 				break;
+
+
+
+
+
 			case '*':
 				// Return an error code for invalid LHS for * operator if such is true
 				if (!check_binary_ops(the_status, the_input[i])) {return 18;}
@@ -112,8 +148,20 @@ int SyntaxChecker::syntax_check(string the_input) {
 				}
 				
 				// No problems were caused, set the status
+				if (currentNum >= 0) // No right parenthesis before this
+				{
+					tempToken.isANumber = true;
+					tempToken.number = currentNum;
+					currentNum = -1;
+					theList.push_back(tempToken);
+				}
 				the_status = MULT;
 				break;
+
+
+
+
+
 			case '/':
 				// Return an error code for invalid LHS for / operator if such is true
 				if (!check_binary_ops(the_status, the_input[i])) {return 17;}
@@ -126,8 +174,20 @@ int SyntaxChecker::syntax_check(string the_input) {
 				}
 				
 				// No problems were caused, set the status
+				if (currentNum >= 0) // No right parenthesis before this
+				{
+					tempToken.isANumber = true;
+					tempToken.number = currentNum;
+					currentNum = -1;
+					theList.push_back(tempToken);
+				}
 				the_status = DIV;
 				break;
+
+
+
+
+
 			case '%':
 				// Return an error code for invalid LHS for % operator if such is true
 				if (!check_binary_ops(the_status, the_input[i])) {return 16;}
@@ -140,8 +200,20 @@ int SyntaxChecker::syntax_check(string the_input) {
 				}
 				
 				// No problems were caused, set the status
+				if (currentNum >= 0) // No right parenthesis before this
+				{
+					tempToken.isANumber = true;
+					tempToken.number = currentNum;
+					currentNum = -1;
+					theList.push_back(tempToken);
+				}
 				the_status = MOD;
 				break;
+
+
+
+
+
 			case '^':
 				// Return an error code for invalid LHS for ^ operator if such is true
 				if (!check_binary_ops(the_status, the_input[i])) {return 15;}
@@ -153,8 +225,20 @@ int SyntaxChecker::syntax_check(string the_input) {
 				}
 				
 				// No problems were caused, set the status
+				if (currentNum >= 0) // No right parenthesis before this
+				{
+					tempToken.isANumber = true;
+					tempToken.number = currentNum;
+					currentNum = -1;
+					theList.push_back(tempToken);
+				}
 				the_status = POWER;
 				break;
+
+
+
+
+
 			case '>':
 				// Return an error code for invalid LHS for > operator if such is true
 				if (!check_binary_ops(the_status, the_input[i])) {return 14;}
@@ -167,8 +251,20 @@ int SyntaxChecker::syntax_check(string the_input) {
 				}
 				
 				// No problems were caused, set the status
+				if (currentNum >= 0) // No right parenthesis before this
+				{
+					tempToken.isANumber = true;
+					tempToken.number = currentNum;
+					currentNum = -1;
+					theList.push_back(tempToken);
+				}
 				the_status = GT;
 				break;
+
+
+
+
+
 			case '<':
 				// Return an error code for invalid LHS for < operator if such is true
 				if (!check_binary_ops(the_status, the_input[i])) {return 13;}
@@ -181,8 +277,20 @@ int SyntaxChecker::syntax_check(string the_input) {
 				}
 				
 				// No problems were caused, set the status
+				if (currentNum >= 0) // No right parenthesis before this
+				{
+					tempToken.isANumber = true;
+					tempToken.number = currentNum;
+					currentNum = -1;
+					theList.push_back(tempToken);
+				}
 				the_status = LT;
 				break;
+
+
+
+
+
 			case '!':
 				// This checks to see if ! is interrupting ==, &&, or ||
 				the_error_code = multichar_token_unfinished(the_status);
@@ -200,10 +308,29 @@ int SyntaxChecker::syntax_check(string the_input) {
 					quantity_before_not = 1;
 				else
 					quantity_before_not = 0;
+
+				if (currentNum >= 0) // No right parenthesis before this
+				{
+					tempToken.isANumber = true;
+					tempToken.number = currentNum;
+					currentNum = -1;
+					theList.push_back(tempToken);
+				}
+				else if (the_status != NONE && the_status != DIGIT && the_input[i - 1] != '(')
+				{
+					tempToken.isANumber = false;
+					tempToken.token = the_status;
+					theList.push_back(tempToken);
+				}
 					
 				// No problems up to here, set the status
 				the_status = NOT;
 				break;
+
+
+
+
+
 			case '=':
 				// Having a space before an equal sign forces the equal sign to start ==.
 				if (space) {
@@ -238,11 +365,23 @@ int SyntaxChecker::syntax_check(string the_input) {
 				}
 				// These last two statements make sure operands are present for the == operator if there are no spaces
 				else if (check_binary_ops(the_status, the_input[i])) {
+					if (currentNum >= 0) // No right parenthesis before this
+					{
+						tempToken.isANumber = true;
+						tempToken.number = currentNum;
+						currentNum = -1;
+						theList.push_back(tempToken);
+					}
 					the_status = SINGLEEQ;
 				}
 				else { return 10; }
 				space = 0;
 				break;
+
+
+
+
+
 			case '&':
 				// We've encountered the first &, this is the second to form &&
 				if (the_status == SINGLEAND) {
@@ -251,9 +390,21 @@ int SyntaxChecker::syntax_check(string the_input) {
 				else {
 					// Return an error code for invalid LHS for && operator if such is true
 					if (!check_binary_ops(the_status, the_input[i])) {return 9;}
+					if (currentNum >= 0) // No right parenthesis before this
+					{
+						tempToken.isANumber = true;
+						tempToken.number = currentNum;
+						currentNum = -1;
+						theList.push_back(tempToken);
+					}
 					the_status = SINGLEAND;
 				}
 				break;
+
+
+
+
+
 			case '|':
 				// We've encountered the first |, this is the second to form ||
 				if (the_status == SINGLEOR) {
@@ -262,9 +413,21 @@ int SyntaxChecker::syntax_check(string the_input) {
 				else {
 					// Return an error code for invalid LHS for || operator if such is true
 					if (!check_binary_ops(the_status, the_input[i])) {return 8;}
+					if (currentNum >= 0) // No right parenthesis before this
+					{
+						tempToken.isANumber = true;
+						tempToken.number = currentNum;
+						currentNum = -1;
+						theList.push_back(tempToken);
+					}
 					the_status = SINGLEOR;
 				}
 				break;
+
+
+
+
+
 			case ' ':
 				space = 1;
 				// This checks to see if a space is interrupting ==, &&, or ||
@@ -273,10 +436,23 @@ int SyntaxChecker::syntax_check(string the_input) {
 					cout << "Incomplete multi-character operator found." << endl;
 					return the_error_code;
 				}
+
+				if (currentNum >= 0) // No right parenthesis before this
+				{
+					tempToken.isANumber = true;
+					tempToken.number = currentNum;
+					currentNum = -1;
+					theList.push_back(tempToken);
+				}
 				
 				// Reset flags for operations that will have been interrupted with a space
 				working_on_number = quantity_before_not = 0;
 				break;
+
+
+
+
+
 			case '0':
 			case '1':
 			case '2':
@@ -297,12 +473,28 @@ int SyntaxChecker::syntax_check(string the_input) {
 						return the_error_code;
 					}
 				}
+
+				if (the_status != NONE && !working_on_number && the_input[i-1] != '(')
+				{
+					tempToken.isANumber = false;
+					tempToken.token = the_status;
+					theList.push_back(tempToken);
+				}
+
 				// Sets a flag indicating this might be part of a multi-digit number
 				working_on_number = 1;
 				
+				// Set the current number to either 10*current + new digit or new digit if we haven't encountered a digit yet.
+				currentNum = (10 * currentNum * (currentNum >= 0)) + (the_input[i] - 48);
+
 				// No problems were caused, set the status
 				the_status = DIGIT;
 				break;
+
+
+
+
+
 			case '(':
 				// If we have a number or parenthetical value preceeding this with no operator, generate the error code
 				if (!check_number(the_status, working_on_number)) {return 6;}
@@ -317,10 +509,25 @@ int SyntaxChecker::syntax_check(string the_input) {
 				// If working_on_number was for some reason not set to 0, do so
 				// UNNECCESSARY LINE MAYBE?
 				working_on_number = 0;
-				
+				if (the_status != NONE)
+				{
+					tempToken.isANumber = false;
+					tempToken.token = the_status;
+					theList.push_back(tempToken);
+				}
+
+				tempToken.isANumber = false;
+				tempToken.token = LPAREN;
+				theList.push_back(tempToken);
+
 				// Increment the parenthesis count
 				paren_count++;
 				break;
+
+
+
+
+
 			case ')':
 				// Decrement the parenthesis count
 				paren_count--;
@@ -332,6 +539,16 @@ int SyntaxChecker::syntax_check(string the_input) {
 				// Return an error code for invalid end of enclosed expression if such is true
 				// This will also error if we have an incomplete dual character operator
 				if (!check_binary_ops(the_status, the_input[i])) {return 5;}
+				if (currentNum >= 0) // No right parenthesis before this
+				{
+					tempToken.isANumber = true;
+					tempToken.number = currentNum;
+					currentNum = -1;
+					theList.push_back(tempToken);
+				}
+				tempToken.isANumber = false;
+				tempToken.token = RPAREN;
+				theList.push_back(tempToken);
 				break;
 			default:
 				cout << "Unrecognized token encountered: " << the_input[i] << endl;
@@ -352,6 +569,15 @@ int SyntaxChecker::syntax_check(string the_input) {
 		cout << "Missing closing parenthesis." << endl;
 		return 1;
 	}
+
+	if (currentNum >= 0) // No right parenthesis before this
+	{
+		tempToken.isANumber = true;
+		tempToken.number = currentNum;
+		currentNum = -1;
+		theList.push_back(tempToken);
+	}
+
 	return 0;
 }
 
@@ -359,6 +585,7 @@ void SyntaxChecker::reset_variables() {
 	the_status = NONE;
 	quantity_before_not = working_on_number = paren_count = the_error_code = 0;
 	space = 1;
+	currentNum = -1;
 }
 
 // This gets the specific error code for each double character operator if such is unfinished

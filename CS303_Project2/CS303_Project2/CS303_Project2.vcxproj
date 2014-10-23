@@ -11,9 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Constants.h" />
+    <ClInclude Include="Evaluator.h" />
     <ClInclude Include="syntax_checker.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Evaluator.cpp" />
     <ClCompile Include="source.cpp" />
     <ClCompile Include="syntax_check.cpp" />
   </ItemGroup>

@@ -6,3 +6,10 @@ David Allen:
 	- Checking for negative numbers and zeroes being in unfortunate positions is not checked in this part of the code.
 	- Bitwise AND as well as bitwise OR are not supported.
 	- Multi-character tokens, such as multi-digit numbers, &&, ||, >=, <=, etc can not be split up by spaces.
+	
+	
+Chase Peterson:
+	-Only single digit numbers are being handled in expressions
+	-Assuming as well that ALL syntax checking is handled in syntax_checker.  Any errors in syntax will cause the
+	 evaluator to return NULL
+	 

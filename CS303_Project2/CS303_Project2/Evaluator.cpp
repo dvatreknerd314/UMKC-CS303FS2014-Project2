@@ -185,7 +185,9 @@ int evaluate_expression(string& input)
 			}
 			operators.pop(); //dump the last opening parenthesis, we're done with it
 			if (isNot(itr->toString())) {
-				//DO THE NOT THING
+				result = !operands.top();
+				operands.pop();
+				operands.push(result);
 			}
 		}
 		else if (isNot(itr->toString()))

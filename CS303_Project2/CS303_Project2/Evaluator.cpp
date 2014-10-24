@@ -10,27 +10,27 @@
 //October 22nd  right now this does not handle boolean expressions, will be made to
 
 
-int precedence(string text)
+int precedence(syntax_status token)
 {
-	if (text == "LPAREN")
+	if (token == LPAREN)
 		return 0;
 
-	else if (text == "EQ" || text == "NE")
+	else if (token == EQ || token == NE)
 		return 1;
 
-	else if (text == "AND" || text == "OR")
+	else if (token == AND || token == OR)
 		return 2;
 
-	else if (text == "GT" || text == "GE" || text == "LT" || text == "LE")
+	else if (token == GT || token == GE || token == LT || token == LE)
 		return 3;
 
-	else if (text == "PLUS" || text == "MINUS")
+	else if (token == PLUS || token == MINUS)
 		return 4;
 
-	else if (text == "MULT" || text == "DIV" || text == "MOD")
+	else if (token == MULT || token == DIV || token == MOD)
 		return 5;
 
-	else if (text == "POWER")
+	else if (token == POWER)
 		return 6;
 
 	else
@@ -40,83 +40,106 @@ int precedence(string text)
 
 
 
-bool isOperator(string text)
+bool isOperator(syntax_status text)
 {
-	return(text == "PLUS" || text == "MINUS" || text == "MULT" || text == "MOD" || text == "DIV" || text == "POWER"
-		|| text == "GT" || text == "LT" || text == "GE" || text == "LE" || text == "NE" || text == "EQ" ||text == "OR" || text == "AND");
+	return(text == PLUS || text == MINUS || text == MULT || text == MOD || text == DIV || text == POWER
+		|| text == GT || text == LT || text == GE || text == LE || text == NE || text == EQ ||text == OR || text == AND);
 }
 
-bool isOpen(string text)
+bool isOpen(syntax_status text)
 {
-	return (text == "LPAREN");
+	return (text == LPAREN);
 }
 
-bool isClose(string text)
+bool isClose(syntax_status text)
 {
-	return (text == "RPAREN");
+	return (text == RPAREN);
 }
 
-int process(int lhs, int rhs, string oper)
+int process(int lhs, int rhs, syntax_status oper)
 {
-	if (oper == "PLUS") {
+	if (oper == PLUS) {
 		return lhs + rhs;
 	}
-	if (oper == "MINUS") {
+	if (oper == MINUS) {
 		return lhs - rhs;
 	}
-	if (oper == "DIV") {
+	if (oper == DIV) {
 		return lhs / rhs;
 	}
-	if (oper == "MULT") {
+	if (oper == MULT) {
 		return lhs*rhs;
 	}
-	if (oper == "MOD") {
+	if (oper == MOD) {
 		return lhs%rhs;
 	}
-	if (oper == "POWER")
+	if (oper == POWER)
 	{
-		for (int i = 1; i < rhs; i++)
-			lhs = lhs*lhs;
-		return lhs;
+		int the_result = lhs;
+		bool neg = 0;
+		int exp = rhs;
+		if (rhs < 0)
+		{
+			neg = 1;
+			exp = -rhs;
+		}
+
+		for (int i = 1; i < exp; i++)
+			the_result = the_result*lhs;
+
+		if (!rhs)
+			the_result = 1;
+		else if (neg)
+		{
+			the_result = 1 / the_result;
+		}
+		return the_result;
 	}
-	if (oper == "GT") {
+	if (oper == GT) {
 		return(lhs > rhs);
 	}
-	if (oper == "LT") {
+	if (oper == LT) {
 		return(lhs < rhs);
 	}
-	if (oper == "LE") {
+	if (oper == LE) {
 		return(lhs <= rhs);
 	}
-	if (oper == "GE") {
+	if (oper == GE) {
 		return(lhs >= rhs);
 	}
-	if (oper == "EQ") {
+	if (oper == EQ) {
 		return(lhs == rhs);
 	}
-	if (oper == "NE") {
+	if (oper == NE) {
 		return(lhs != rhs);
 	}
-	if (oper == "AND") {
+	if (oper == AND) {
 		return(lhs && rhs);
 	}
-	if (oper == "OR") {
+	if (oper == OR) {
 		return(lhs || rhs);
 	}
 }
 
-bool isNot(string text) {
-	return text == "NOT";
+bool isNot(syntax_status text) {
+	return text == NOT;
 }
 
+bool isNegative(syntax_status token) {
+	return token == NEG;
+}
+
+bool isUnary(syntax_status token) {
+	return isNot(token) || isNegative(token);
+}
 
 int evaluate_expression(string& input)
 {
 	SyntaxChecker check;
 	int rhs, lhs, result;
-	string oper;
+	syntax_status oper;
 	stack<int> operands;
-	stack<string> operators;
+	stack<syntax_status> operators;
 
 	list<exprToken> expression;
 	
@@ -133,45 +156,51 @@ int evaluate_expression(string& input)
 		if (itr->isANumber)
 		{
 			operands.push(itr->number);
-			if (isNot(operators.top())) {
-				result = !operands.top();
+			while (!operators.empty() && isUnary(operators.top()))
+			{
+				if (isNot(operators.top()))
+					result = !operands.top();
+				else if (isNegative(operators.top()))
+					result = -operands.top();
 				operands.pop();
+				operators.pop();
 				operands.push(result);
 			}
 		}
 		//If it's an operator
-		else if (isOperator(itr->toString()))
+		else if (isOperator(itr->token))
 		{
 			//if there are none, push it onto the stack
 			if (operators.empty())
 			{
-				operators.push(itr->toString());
+				operators.push(itr->token);
 			}
 			//if it's precedence is lower or equal to what's on top, process the last one
-			else if (precedence(itr->toString()) <= precedence(operators.top()))
+			else if (precedence(itr->token) <= precedence(operators.top()))
 			{
 				rhs = operands.top();
 				operands.pop();
 				lhs = operands.top();
+				operands.pop();
 				oper = operators.top();
 				operators.pop();
 				result = process(lhs, rhs, oper);
 				operands.push(result);
-				operators.push(itr->toString());
+				operators.push(itr->token);
 			}
 			//if it's of higher precedence, push it on to be processed later
-			else if (precedence(itr->toString()) > precedence(operators.top()))
+			else if (precedence(itr->token) > precedence(operators.top()))
 			{
-				operators.push(itr->toString());
+				operators.push(itr->token);
 			}
 		}
 		//it's an opening parenthesis, put it in operator stack
-		else if (isOpen(itr->toString()))
+		else if (isOpen(itr->token))
 		{
-			operators.push(itr->toString());
+			operators.push(itr->token);
 		}
 		//It's a closing parenthesis, process until the last opening parenthesis
-		else if (isClose(itr->toString()))
+		else if (isClose(itr->token))
 		{
 			while (!isOpen(operators.top()))
 			{
@@ -184,15 +213,20 @@ int evaluate_expression(string& input)
 				operands.push(process(lhs, rhs, oper));
 			}
 			operators.pop(); //dump the last opening parenthesis, we're done with it
-			if (isNot(itr->toString())) {
-				result = !operands.top();
+			while (!operators.empty() && isUnary(operators.top()))
+			{ 
+				if (isNot(operators.top()))
+					result = !operands.top();
+				else if (isNegative(operators.top()))
+					result = -operands.top();
 				operands.pop();
+				operators.pop();
 				operands.push(result);
 			}
 		}
-		else if (isNot(itr->toString()))
+		else if (isUnary(itr->token))
 		{
-			operators.push(itr->toString());
+			operators.push(itr->token);
 		}
 
 	}

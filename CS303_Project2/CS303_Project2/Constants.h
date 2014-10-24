@@ -24,6 +24,7 @@
 // SINGLEOR: |
 // LPAREN: (
 // RPAREN: )
+// NEG: Negative instead of Minus
 // Parenthesis don't affect the token value in the syntax checker but they do in the expression tokenizer
 
 /*
@@ -32,6 +33,6 @@ are used to correctly process double character operators and determine if a doub
 prematurely terminated.
 */
 
-enum syntax_status { PLUS, MINUS, MULT, DIV, MOD, POWER, NOT, GT, GE, LT, LE, AND, OR, EQ, NE, NONE, DIGIT, SINGLEEQ, SINGLEAND, SINGLEOR, LPAREN, RPAREN };
+enum syntax_status { PLUS, MINUS, MULT, DIV, MOD, POWER, NOT, GT, GE, LT, LE, AND, OR, EQ, NE, NONE, DIGIT, SINGLEEQ, SINGLEAND, SINGLEOR, LPAREN, RPAREN, NEG };
 
 #endif

@@ -1,4 +1,5 @@
 #include "syntax_checker.h"
+#include "Evaluator.h"
 #include <iostream>
 #include <fstream>
 #include <list>
@@ -18,6 +19,8 @@ int main() {
 			{
 				cout << (*i).toString() << " ";
 			}
+			cout << endl;
+			cout << "Evaluates to: " << evaluate_expression(the_input);
 			cout << endl;
 		}
 		theList.clear();

@@ -49,6 +49,7 @@ struct exprToken {
 			case OR: return "OR"; break;
 			case LPAREN: return "LPAREN"; break;
 			case RPAREN: return "RPAREN"; break;
+			case NEG: return "NEG"; break;
 				// These should not output
 			case DIGIT: return "DIGIT"; break;
 			case SINGLEAND: return "SINGLEAND"; break;

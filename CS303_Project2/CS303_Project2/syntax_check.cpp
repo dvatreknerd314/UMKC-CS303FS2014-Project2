@@ -71,7 +71,10 @@ bool SyntaxChecker::check_number(syntax_status& the_status, bool working) {
 }
 
 // This is designed for testing whether syntax_check's error codes are right
-int SyntaxChecker::syntax_check(string the_input) { return syntax_check(the_input, new list<exprToken>); }
+int SyntaxChecker::syntax_check(string the_input) { 
+	list<exprToken> aList;
+	return syntax_check(the_input, aList);
+}
 
 // This function will go through all of the_input and check to see if it's a valid expression
 int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
@@ -121,28 +124,37 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 					return the_error_code;
 				}
 
+				if (the_status == NONE)
+					the_status = NEG;
 				// If we interrupted a number, add its exprToken to theList
 				// This means - is a binary operator in this instance
-				if (currentNum >= 0) // No right parenthesis before this
+				else if (the_status == DIGIT)
 				{
-					tempToken.isANumber = true;
-					tempToken.number = currentNum;
-					currentNum = -1;
-					theList.push_back(tempToken);
+					if (currentNum >= 0)
+					{
+						tempToken.isANumber = true;
+						tempToken.number = currentNum;
+						currentNum = -1;
+						theList.push_back(tempToken);
+					}
+					the_status = MINUS;
+				}
+				else
+				{
+					if (the_status != NONE && ((!theList.back().isANumber && theList.back().token != LPAREN) || theList.back().isANumber) )
+					{
+						tempToken.isANumber = false;
+						tempToken.token = the_status;
+						theList.push_back(tempToken);
+					}
+					the_status = NEG;
 				}
 				// Check to see if we just completed an operator
 				// This means - is a unary operator in this instance
-				else if (the_status != NONE && the_status != DIGIT && the_input[i - 1] != '(')
-				{
-					tempToken.isANumber = false;
-					tempToken.token = the_status;
-					theList.push_back(tempToken);
-				}
 				
 				// No problems were caused, set the status
 				working_on_number = 0;
 				space = 0;
-				the_status = MINUS;
 				break;
 
 

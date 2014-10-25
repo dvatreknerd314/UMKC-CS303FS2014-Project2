@@ -1,13 +1,8 @@
 //Chase Peterson
 
 #include "Evaluator.h"
-
+#include <math.h>
 #include <stack>
-
-//Assuming that none of the operands are more than 1 digit in length...
-
-
-//October 22nd  right now this does not handle boolean expressions, will be made to
 
 
 int precedence(syntax_status token)
@@ -43,7 +38,7 @@ int precedence(syntax_status token)
 bool isOperator(syntax_status text)
 {
 	return(text == PLUS || text == MINUS || text == MULT || text == MOD || text == DIV || text == POWER
-		|| text == GT || text == LT || text == GE || text == LE || text == NE || text == EQ ||text == OR || text == AND);
+		|| text == GT || text == LT || text == GE || text == LE || text == NE || text == EQ || text == OR || text == AND);
 }
 
 bool isOpen(syntax_status text)
@@ -56,7 +51,7 @@ bool isClose(syntax_status text)
 	return (text == RPAREN);
 }
 
-int process(int lhs, int rhs, syntax_status oper)
+int process(double lhs, double rhs, syntax_status oper)
 {
 	if (oper == PLUS) {
 		return lhs + rhs;
@@ -71,29 +66,11 @@ int process(int lhs, int rhs, syntax_status oper)
 		return lhs*rhs;
 	}
 	if (oper == MOD) {
-		return lhs%rhs;
+		return (int)lhs%(int)rhs;
 	}
 	if (oper == POWER)
 	{
-		int the_result = lhs;
-		bool neg = 0;
-		int exp = rhs;
-		if (rhs < 0)
-		{
-			neg = 1;
-			exp = -rhs;
-		}
-
-		for (int i = 1; i < exp; i++)
-			the_result = the_result*lhs;
-
-		if (!rhs)
-			the_result = 1;
-		else if (neg)
-		{
-			the_result = 1 / the_result;
-		}
-		return the_result;
+		return pow(lhs, rhs);
 	}
 	if (oper == GT) {
 		return(lhs > rhs);
@@ -136,21 +113,21 @@ bool isUnary(syntax_status token) {
 int evaluate_expression(string& input)
 {
 	SyntaxChecker check;
-	int rhs, lhs, result;
+	double rhs, lhs, result;
 	syntax_status oper;
-	stack<int> operands;
+	stack<double> operands;
 	stack<syntax_status> operators;
 
 	list<exprToken> expression;
-	
-	
+
+
 	if (check.syntax_check(input, expression) != 0)
 	{
 		return NULL; //if the input is invalid, don't return anything
 	}
-	
 
-	for (list<exprToken>::iterator itr = expression.begin(); itr != expression.end(); ++itr) 
+
+	for (list<exprToken>::iterator itr = expression.begin(); itr != expression.end(); ++itr)
 	{
 		//If it's a number push it on the operand stack
 		if (itr->isANumber)
@@ -214,7 +191,7 @@ int evaluate_expression(string& input)
 			}
 			operators.pop(); //dump the last opening parenthesis, we're done with it
 			while (!operators.empty() && isUnary(operators.top()))
-			{ 
+			{
 				if (isNot(operators.top()))
 					result = !operands.top();
 				else if (isNegative(operators.top()))
@@ -231,7 +208,7 @@ int evaluate_expression(string& input)
 
 	}
 
-	while(!operators.empty())
+	while (!operators.empty())
 	{
 		rhs = operands.top();
 		operands.pop();

@@ -4,7 +4,10 @@
 #include <math.h>
 #include <stack>
 
+//The following assumes that syntax_checker will handle all syntax checking.
 
+
+//precedence takes a token and returns it's precendence level
 int precedence(syntax_status token)
 {
 	if (token == LPAREN)
@@ -34,23 +37,26 @@ int precedence(syntax_status token)
 }
 
 
-
+//This will return if the operator in question is a +, -, *, %, /, ^, >, <, >=, <=, !=, ==, ||, or &&
 bool isOperator(syntax_status text)
 {
 	return(text == PLUS || text == MINUS || text == MULT || text == MOD || text == DIV || text == POWER
 		|| text == GT || text == LT || text == GE || text == LE || text == NE || text == EQ || text == OR || text == AND);
 }
 
+//This returns true if the operator is a "("
 bool isOpen(syntax_status text)
 {
 	return (text == LPAREN);
 }
 
+//This returns true if the operator is a ")"
 bool isClose(syntax_status text)
 {
 	return (text == RPAREN);
 }
 
+//This processes a an operator with a rhs and lhs argument
 int process(double lhs, double rhs, syntax_status oper)
 {
 	if (oper == PLUS) {
@@ -98,41 +104,46 @@ int process(double lhs, double rhs, syntax_status oper)
 	}
 }
 
+//Is the character "!"
 bool isNot(syntax_status text) {
 	return text == NOT;
 }
 
+//Is the character "-" but not for a minus operator
 bool isNegative(syntax_status token) {
 	return token == NEG;
 }
 
+//This covers both isNegative and isNot
 bool isUnary(syntax_status token) {
 	return isNot(token) || isNegative(token);
 }
 
+//Takes an expression in a string and evalutates in, boolean or arithmentic
 int evaluate_expression(string& input)
 {
-	SyntaxChecker check;
-	double rhs, lhs, result;
-	syntax_status oper;
-	stack<double> operands;
-	stack<syntax_status> operators;
+	SyntaxChecker check; //Here's our checker object
+	double rhs, lhs, result; //Some doubles we will need
+	syntax_status oper; //this is for passing into the function process
+	stack<double> operands; //Operand stack
+	stack<syntax_status> operators; //Operator stack
 
-	list<exprToken> expression;
+	list<exprToken> expression; //Here's the list we need to pass into syntax_check
 
-
-	if (check.syntax_check(input, expression) != 0)
+	//Here we pass in the expression to see if it passes the test
+	if (check.syntax_check(input, expression) != 0) //this also populates the list of tokens
 	{
 		return NULL; //if the input is invalid, don't return anything
 	}
 
-
+	//Iterate through the list of tokens
 	for (list<exprToken>::iterator itr = expression.begin(); itr != expression.end(); ++itr)
 	{
 		//If it's a number push it on the operand stack
 		if (itr->isANumber)
 		{
 			operands.push(itr->number);
+			//If there is a negative or not on top of the stack, process it now
 			while (!operators.empty() && isUnary(operators.top()))
 			{
 				if (isNot(operators.top()))
@@ -190,6 +201,9 @@ int evaluate_expression(string& input)
 				operands.push(process(lhs, rhs, oper));
 			}
 			operators.pop(); //dump the last opening parenthesis, we're done with it
+			
+			//Now if there is a ! or - on top of the operator stack we need to evaluate it
+			//for the expression that was inside the parenthesis
 			while (!operators.empty() && isUnary(operators.top()))
 			{
 				if (isNot(operators.top()))
@@ -201,13 +215,14 @@ int evaluate_expression(string& input)
 				operands.push(result);
 			}
 		}
+		//If we have a - or ! we need to put it in the operand stack regardless of any precedence
 		else if (isUnary(itr->token))
 		{
 			operators.push(itr->token);
 		}
 
 	}
-
+	//After we finish going through the list, we need to evaluate any remaining operators
 	while (!operators.empty())
 	{
 		rhs = operands.top();
@@ -218,6 +233,7 @@ int evaluate_expression(string& input)
 		operators.pop();
 		operands.push(process(lhs, rhs, oper));
 	}
+	//The top of the operand stack is the solution
 	return operands.top();
 
 

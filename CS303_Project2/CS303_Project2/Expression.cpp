@@ -20,7 +20,8 @@ Expression::~Expression()
 int Expression::getAnswer()
 {
 	Expression tempExpr;
-	return tempExpr.evaluate_expression(exprString);
+	//return tempExpr.evaluate_expression(exprString);
+	return evaluate_expression(exprString);
 }
 
 /*

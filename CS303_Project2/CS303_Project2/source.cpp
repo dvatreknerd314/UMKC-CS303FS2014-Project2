@@ -4,7 +4,7 @@
 #include <fstream>
 #include <list>
 using namespace std;
-
+/*
 int main() {
 	string the_input;
 	ifstream test_file("test_input.txt");
@@ -28,3 +28,5 @@ int main() {
 	test_file.close();
 	return 0;
 }
+
+*/

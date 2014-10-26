@@ -19,7 +19,7 @@ bool enterInputSource(Expression* tExpression, int& count);
 int main()
 {
 	//returns whether the expression was successfully entered
-	bool expressionSuccess;
+	bool expressionSuccess = false;
 	//instantiates 50 expression objects
 	Expression tExpression[50];
 	//counts the number of expressions being used
@@ -62,7 +62,7 @@ void enterFromFile(Expression* tExpression, int& count)
 	cin >> fileName;
 	fin.open(fileName);
 
-	while (!fin.good)
+	while (!fin.good())
 	{
 		cout << "Invalid file name. Please re-enter the file name, or type 'M' to return to the main menu.\n";
 
@@ -94,7 +94,7 @@ void enterFromFile(Expression* tExpression, int& count)
 
 void enterFromKeys(Expression* tExpression, int& count)
 {
-	char yOrN;
+	char yOrN = 'y';
 
 	do
 	{
@@ -106,8 +106,6 @@ void enterFromKeys(Expression* tExpression, int& count)
 
 		tExpression[count].set(userInput);
 		count++;
-
-		char yOrN;
 
 		cout << "Would you like to enter another expression? Enter Y for YES or N for NO.\n";
 		cin >> yOrN;

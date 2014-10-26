@@ -24,6 +24,9 @@
     <ClInclude Include="Evaluator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Expression.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source.cpp">
@@ -33,6 +36,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Evaluator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Expression.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

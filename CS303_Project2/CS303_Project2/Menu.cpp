@@ -40,7 +40,9 @@ int main()
 
 	for (int i = 0; i < count; i++)
 	{
-		cout << "Expression #" << i << ":  " << tExpression[i] << endl << "   Result: " << tExpression[i] << endl;
+		//cout << "Expression #" << i << ":  " << tExpression[i] << endl << "   Result: " << tExpression[i] << endl;
+	
+		cout << "Expression #" << i << ":  " << tExpression[i].getString() << endl << "   Result: " << tExpression[i].getAnswer() << endl;
 	}
 
 

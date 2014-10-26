@@ -13,3 +13,8 @@ Chase Peterson:
 	-Assuming as well that ALL syntax checking is handled in syntax_checker.  Any errors in syntax will cause the
 	 evaluator to return NULL
 	 
+Gretchen Gilbreath:
+	-No absurdly large numbers will be entered after a carot.
+	-The number of characters in an expression will not exceed the number of characters accounted for by a string object.
+	-Expressions will be input through files or by the user entering them manually.
+	-An expression will not take up more than one line in a file. No more than one expression may be on a single line.

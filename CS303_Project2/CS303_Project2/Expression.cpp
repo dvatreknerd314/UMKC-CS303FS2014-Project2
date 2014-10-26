@@ -16,6 +16,14 @@ Expression::~Expression()
 {
 }
 
+//what happens if NULL is returned, will it mess up the menu?
+int Expression::getAnswer()
+{
+	Expression tempExpr;
+	return tempExpr.evaluate_expression(exprString);
+}
+
+/*
 //overloaded << operator for returning expressions
 std::ostream& operator<<(std::ostream& os, Expression mExpression)
 {
@@ -28,6 +36,7 @@ std::ostream& operator<<(std::ostream& os, Expression mExpression)
 
 	return os;
 }
+*/
 
 /*
 //overloaded >> operator for entering expressions
@@ -45,6 +54,7 @@ void Expression::set(string hString)
 	exprString = hString;
 }
 
+/*
 //evaluates the eexpression, doesn't return the error
 void Expression::evaluate()
 {
@@ -56,4 +66,10 @@ void Expression::evaluate()
 	{
 		error = true;
 	}
+}
+*/
+
+string Expression::getString()
+{
+	return exprString;
 }

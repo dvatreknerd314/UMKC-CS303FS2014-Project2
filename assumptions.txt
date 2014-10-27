@@ -9,9 +9,9 @@ David Allen:
 	
 	
 Chase Peterson:
-	-Only single digit numbers are being handled in expressions
-	-Assuming as well that ALL syntax checking is handled in syntax_checker.  Any errors in syntax will cause the
+	-Assuming that ALL syntax checking is handled in syntax_checker.  Any errors in syntax will cause the
 	 evaluator to return NULL
+	 
 	 
 Gretchen Gilbreath:
 	-No absurdly large numbers will be entered after a carot.

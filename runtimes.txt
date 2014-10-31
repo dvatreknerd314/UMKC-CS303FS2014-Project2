@@ -5,3 +5,7 @@ David Allen:
 	SyntaxChecker::SyntaxChecker(): O(1)
 	SyntaxChecker::reset_variables(): O(1)
 	SyntaxChecker::multichar_token_incomplete(): O(1)
+	
+	
+Chase Peterson
+	Expression evaluator, O(n) 

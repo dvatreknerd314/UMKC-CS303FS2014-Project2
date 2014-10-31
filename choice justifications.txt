@@ -19,3 +19,9 @@ David Allen:
 
 <Possibly Temporary>
  - I chose not to support the ++ operator as we need to get the program working as is first.
+ 
+ 
+ Chase Peterson:
+ - I chose to use if statements for determining operators in order to stay flexible with the syntax checking code.
+ - I chose to use 2 stacks, one for operands and one for operators, instead of converting the expressions to postfix as it is much easier and cleaner
+ - Converts any ints into doubles so I can handle fractional solutions when working with devision.

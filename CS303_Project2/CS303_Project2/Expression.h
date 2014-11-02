@@ -19,7 +19,7 @@ public:
 	~Expression();
 	//void evaluate();
 	void set(string hString);
-	int getAnswer();
+	double getAnswer();
 	string getString();
 	//void showResult();
 	//friend std::ostream& operator<<(std::ostream& os, Expression mExpression);

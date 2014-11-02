@@ -19,7 +19,7 @@ SyntaxChecker::SyntaxChecker() {
 }
 
 // This function checks to see if an appropriate token exists before a binary operator
-bool SyntaxChecker::check_binary_ops(syntax_status& the_status, char the_operator) {
+bool SyntaxChecker::check_binary_ops(syntax_status& the_status, char the_operator, int i) {
 	// If this is the case, we do not have an appropriate value as the left hand side operand for the operator
 	if (the_status != DIGIT) {
 		// Modify the output to fit the appropriate operator
@@ -46,10 +46,10 @@ bool SyntaxChecker::check_binary_ops(syntax_status& the_status, char the_operato
 		}
 		// This is called to make sure we have a right hand operand or a single number within the parenthesis
 		if (the_operator == ')') {
-			cout << "No valid expression contained within the parenthesis" << endl;
+			cout << "No valid expression contained within the parenthesis ending at character "<< i << endl;
 		}
 		else {
-			cout << "No valid left hand side argument for the " << the_output << " operator." << endl;
+			cout << "No valid left hand side argument for the " << the_output << " operator at character " << i << endl;
 		}
 		return 0;
 	}
@@ -59,10 +59,10 @@ bool SyntaxChecker::check_binary_ops(syntax_status& the_status, char the_operato
 	return 1;
 }
 
-bool SyntaxChecker::check_number(syntax_status& the_status, bool working) {
+bool SyntaxChecker::check_number(syntax_status& the_status, bool working, int i) {
 	// We've processed a number but we're not adding more digits to the same number, rather working on a separate one
 	if (the_status == DIGIT && !working) {
-		cout << "Unexpected number or parenthetical value, expected an operator." << endl;
+		cout << "Unexpected number or parenthetical value at character " << i << ", expected an operator." << endl;
 		return 0;
 	}
 	// We just encountered a number or parenthetical value, so we didn't encounter a space.
@@ -87,12 +87,12 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 		switch (the_input[i]) {
 			case '+':
 				// Return an error code for invalid LHS for + operator if such is true
-				if (!check_binary_ops(the_status, the_input[i])) {return 19;}
+				if (!check_binary_ops(the_status, the_input[i], i)) {return 19;}
 				
 				// This checks to see if + is interrupting ==, &&, or ||
 				the_error_code = multichar_token_unfinished(the_status);
 				if (the_error_code) {
-					cout << "Incomplete multi-character operator found." << endl;
+					cout << "Incomplete multi-character operator found at character " << i << "." << endl;
 					return the_error_code;
 				}
 				
@@ -120,7 +120,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 				// This checks to see if - is interrputing &&, ==, or ||
 				the_error_code = multichar_token_unfinished(the_status);
 				if (the_error_code) {
-					cout << "Incomplete multi-character operator found." << endl;
+					cout << "Incomplete multi-character operator found at character " << i << "." << endl;
 					return the_error_code;
 				}
 
@@ -163,12 +163,12 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 
 			case '*':
 				// Return an error code for invalid LHS for * operator if such is true
-				if (!check_binary_ops(the_status, the_input[i])) {return 18;}
+				if (!check_binary_ops(the_status, the_input[i], i)) {return 18;}
 				
 				// This checks to see if * is interrupting ==, &&, or ||
 				the_error_code = multichar_token_unfinished(the_status);
 				if (the_error_code) {
-					cout << "Incomplete multi-character operator found." << endl;
+					cout << "Incomplete multi-character operator found at character " << i << "." << endl;
 					return the_error_code;
 				}
 				
@@ -191,12 +191,12 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 
 			case '/':
 				// Return an error code for invalid LHS for / operator if such is true
-				if (!check_binary_ops(the_status, the_input[i])) {return 17;}
+				if (!check_binary_ops(the_status, the_input[i], i)) {return 17;}
 				
 				// This checks to see if / is interrupting ==, &&, or ||
 				the_error_code = multichar_token_unfinished(the_status);
 				if (the_error_code) {
-					cout << "Incomplete multi-character operator found." << endl;
+					cout << "Incomplete multi-character operator found at character " << i << "." << endl;
 					return the_error_code;
 				}
 				
@@ -219,12 +219,12 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 
 			case '%':
 				// Return an error code for invalid LHS for % operator if such is true
-				if (!check_binary_ops(the_status, the_input[i])) {return 16;}
+				if (!check_binary_ops(the_status, the_input[i], i)) {return 16;}
 				
 				// This checks to see if % is interrupting ==, &&, or ||
 				the_error_code = multichar_token_unfinished(the_status);
 				if (the_error_code) {
-					cout << "Incomplete multi-character operator found." << endl;
+					cout << "Incomplete multi-character operator found at character " << i << "." << endl;
 					return the_error_code;
 				}
 				
@@ -247,11 +247,11 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 
 			case '^':
 				// Return an error code for invalid LHS for ^ operator if such is true
-				if (!check_binary_ops(the_status, the_input[i])) {return 15;}
+				if (!check_binary_ops(the_status, the_input[i], i)) {return 15;}
 				// This checks to see if ^ is interrupting ==, &&, or ||
 				the_error_code = multichar_token_unfinished(the_status);
 				if (the_error_code) {
-					cout << "Incomplete multi-character operator found." << endl;
+					cout << "Incomplete multi-character operator found at character " << i << "." << endl;
 					return the_error_code;
 				}
 				
@@ -274,12 +274,12 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 
 			case '>':
 				// Return an error code for invalid LHS for > operator if such is true
-				if (!check_binary_ops(the_status, the_input[i])) {return 14;}
+				if (!check_binary_ops(the_status, the_input[i], i)) {return 14;}
 				
 				// This checks to see if > is interrupting ==, &&, or ||
 				the_error_code = multichar_token_unfinished(the_status);
 				if (the_error_code) {
-					cout << "Incomplete multi-character operator found." << endl;
+					cout << "Incomplete multi-character operator found at character " << i << "." << endl;
 					return the_error_code;
 				}
 				
@@ -302,12 +302,12 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 
 			case '<':
 				// Return an error code for invalid LHS for < operator if such is true
-				if (!check_binary_ops(the_status, the_input[i])) {return 13;}
+				if (!check_binary_ops(the_status, the_input[i], i)) {return 13;}
 				
 				// This checks to see if < is interrupting ==, &&, or ||
 				the_error_code = multichar_token_unfinished(the_status);
 				if (the_error_code) {
-					cout << "Incomplete multi-character operator found." << endl;
+					cout << "Incomplete multi-character operator found at character " << i << "." << endl;
 					return the_error_code;
 				}
 				
@@ -332,7 +332,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 				// This checks to see if ! is interrupting ==, &&, or ||
 				the_error_code = multichar_token_unfinished(the_status);
 				if (the_error_code) {
-					cout << "Incomplete multi-character operator found." << endl;
+					cout << "Incomplete multi-character operator found at character " << i << "." << endl;
 					return the_error_code;
 				}
 				
@@ -376,7 +376,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 				// Having a space before an equal sign forces the equal sign to start ==.
 				if (space) {
 					// Return an error code for invalid LHS operand for the == operator if such is true.
-					if (!check_binary_ops(the_status, the_input[i])) {return 10;}
+					if (!check_binary_ops(the_status, the_input[i], i)) {return 10;}
 					// This lets the function know we have seen a beginning equal sign
 					the_status = SINGLEEQ;
 				}
@@ -389,7 +389,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 				else if (the_status == NOT) {
 					// Make sure we have necessary operands for the != operator
 					if (!quantity_before_not) {
-						cout << "No valid left hand side operand for the != operator." << endl;
+						cout << "No valid left hand side operand for the != operator at character " << i << "." << endl;
 						return 11;
 					}
 					else {
@@ -405,7 +405,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 					the_status = LE;
 				}
 				// These last two statements make sure operands are present for the == operator if there are no spaces
-				else if (check_binary_ops(the_status, the_input[i])) {
+				else if (check_binary_ops(the_status, the_input[i], i)) {
 					// If we interrupted a number, add its exprToken to theList
 					if (currentNum >= 0) // No right parenthesis before this
 					{
@@ -432,7 +432,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 				}
 				else {
 					// Return an error code for invalid LHS for && operator if such is true
-					if (!check_binary_ops(the_status, the_input[i])) {return 9;}
+					if (!check_binary_ops(the_status, the_input[i], i)) {return 9;}
 					// If we interrupted a number, add its exprToken to theList
 					if (currentNum >= 0) // No right parenthesis before this
 					{
@@ -457,7 +457,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 				}
 				else {
 					// Return an error code for invalid LHS for || operator if such is true
-					if (!check_binary_ops(the_status, the_input[i])) {return 8;}
+					if (!check_binary_ops(the_status, the_input[i], i)) {return 8;}
 					// If we interrupted a number, add its exprToken to theList
 					if (currentNum >= 0) // No right parenthesis before this
 					{
@@ -480,7 +480,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 				// This checks to see if a space is interrupting ==, &&, or ||
 				the_error_code = multichar_token_unfinished(the_status);
 				if (the_error_code) {
-					cout << "Incomplete multi-character operator found." << endl;
+					cout << "Incomplete multi-character operator found at character " << i << "." << endl;
 					return the_error_code;
 				}
 
@@ -512,12 +512,12 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 			case '8':
 			case '9':
 				// If we have a number or parenthetical value preceeding this with no operator, generate the error code
-				if (!check_number(the_status, working_on_number)) {return 7;}
+				if (!check_number(the_status, working_on_number, i)) {return 7;}
 				else {
 				// This checks to see if a number is interrupting ==, &&, or ||
 					the_error_code = multichar_token_unfinished(the_status);
 					if (the_error_code) {
-						cout << "Incomplete multi-character operator found." << endl;
+						cout << "Incomplete multi-character operator found at character " << i << "." << endl;
 						return the_error_code;
 					}
 				}
@@ -546,12 +546,12 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 
 			case '(':
 				// If we have a number or parenthetical value preceeding this with no operator, generate the error code
-				if (!check_number(the_status, working_on_number)) {return 6;}
+				if (!check_number(the_status, working_on_number, i)) {return 6;}
 				else {
 				// This checks to see if ( is interrupting ==, &&, or ||
 					the_error_code = multichar_token_unfinished(the_status);
 					if (the_error_code) {
-						cout << "Incomplete multi-character operator found." << endl;
+						cout << "Incomplete multi-character operator found at character " << i << "." << endl;
 						return the_error_code;
 					}
 				}
@@ -585,12 +585,12 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 				paren_count--;
 				// If there are too many closing parenthesis, error
 				if (paren_count < 0) {
-					cout << "Too many closing parenthesis." << endl;
+					cout << "Too many closing parenthesis at character " << i << "." << endl;
 					return 4;
 				}
 				// Return an error code for invalid end of enclosed expression if such is true
 				// This will also error if we have an incomplete dual character operator
-				if (!check_binary_ops(the_status, the_input[i])) {return 5;}
+				if (!check_binary_ops(the_status, the_input[i], i)) {return 5;}
 				
 				// If we interrupted a number, add its exprToken to theList
 				if (currentNum >= 0) // No right parenthesis before this
@@ -607,7 +607,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 				theList.push_back(tempToken);
 				break;
 			default:
-				cout << "Unrecognized token encountered: " << the_input[i] << endl;
+				cout << "Unrecognized token encountered at " << i << ": " << the_input[i] << endl;
 				return 3;
 		}
 	}
@@ -616,13 +616,13 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 	
 	// We've ended with an operator, inside or outside a closing parenthesis.
 	if (the_status != DIGIT && the_status != NONE) {
-		cout << "Missing right hand operand." << endl;
+		cout << "Missing right hand operand and end of expression." << endl;
 		return 2;
 	}
 	
 	// We have more opening parenthesis than closing, so error
 	else if (paren_count) {
-		cout << "Missing closing parenthesis." << endl;
+		cout << "Missing closing parenthesis at end of expression." << endl;
 		return 1;
 	}
 

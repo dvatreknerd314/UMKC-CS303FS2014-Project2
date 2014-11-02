@@ -21,13 +21,13 @@ int main()
 	//returns whether the expression was successfully entered
 	bool expressionSuccess = false;
 	//instantiates 50 expression objects
-	Expression tExpression[50];
+	Expression tExpression[1000];
 	//counts the number of expressions being used
 	int count = 0;
 
 	//user menu choice message
-	cout << "To enter an expression manually, type 'A'. To retrieve an expression or expressions from a file," 
-		<< " type 'B'. Enter 'E' to exit the program.\n";
+	cout << "To enter an expression manually, type 'B'. To retrieve an expression or expressions from a file," 
+		<< " type 'A'. Enter 'E' to exit the program.\n";
 
 	//looks for input as long as nothing has been input successfully
 	while (!expressionSuccess)
@@ -41,8 +41,10 @@ int main()
 	for (int i = 0; i < count; i++)
 	{
 		//cout << "Expression #" << i << ":  " << tExpression[i] << endl << "   Result: " << tExpression[i] << endl;
-	
-		cout << "Expression #" << i << ":  " << tExpression[i].getString() << endl << "   Result: " << tExpression[i].getAnswer() << endl;
+		cout << "Expression #" << i << ":  " << tExpression[i].getString() << endl;
+		double the_answer = tExpression[i].getAnswer();
+		cout << "   Result: " << (isnan(the_answer) ? "N/A" : to_string(the_answer)) << endl;
+		cout << 
 	}
 
 
@@ -80,7 +82,7 @@ void enterFromFile(Expression* tExpression, int& count)
 	char fileInput[100];
 
 	//goes through file as long as there is information available
-	while (!fin.eof() && count < 50)
+	while (!fin.eof() && count < 1000)
 	{
 		fin.getline(fileInput, 100);
 		tExpression[count].set(string(fileInput));

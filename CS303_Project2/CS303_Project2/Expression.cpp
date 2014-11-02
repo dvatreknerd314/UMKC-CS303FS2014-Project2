@@ -17,7 +17,7 @@ Expression::~Expression()
 }
 
 //what happens if NULL is returned, will it mess up the menu?
-int Expression::getAnswer()
+double Expression::getAnswer()
 {
 	Expression tempExpr;
 	//return tempExpr.evaluate_expression(exprString);

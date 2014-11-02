@@ -120,7 +120,7 @@ bool isUnary(syntax_status token) {
 }
 
 //Takes an expression in a string and evalutates in, boolean or arithmentic
-int evaluate_expression(string& input)
+double evaluate_expression(string& input)
 {
 	SyntaxChecker check; //Here's our checker object
 	double rhs, lhs, result; //Some doubles we will need
@@ -133,7 +133,7 @@ int evaluate_expression(string& input)
 	//Here we pass in the expression to see if it passes the test
 	if (check.syntax_check(input, expression) != 0) //this also populates the list of tokens
 	{
-		return NULL; //if the input is invalid, don't return anything
+		return numeric_limits<double>::quiet_NaN(); //if the input is invalid, return NaN
 	}
 
 	//Iterate through the list of tokens

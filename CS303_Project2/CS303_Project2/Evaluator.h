@@ -4,6 +4,6 @@
 
 	//Evaluate expression
 	//Takes a string expression and evalutates it solution
-	int evaluate_expression(string &input);
+	double evaluate_expression(string &input);
 
 

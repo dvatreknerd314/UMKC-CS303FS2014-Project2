@@ -75,9 +75,10 @@ class SyntaxChecker
 		int paren_count, the_error_code, currentNum;
 		
 		void reset_variables();
-		bool check_binary_ops(syntax_status& the_status, char the_operator, int i);
-		bool check_number(syntax_status& the_status, bool working, int i);
+		bool check_binary_ops(syntax_status& the_status);
+		bool check_number(syntax_status& the_status, bool working);
 		int multichar_token_unfinished(syntax_status& the_status);
+		int return_error(int index, string expression, char token, int force_code);
 };
 
 

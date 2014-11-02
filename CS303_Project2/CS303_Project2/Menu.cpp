@@ -44,7 +44,7 @@ int main()
 		cout << "Expression #" << i << ":  " << tExpression[i].getString() << endl;
 		double the_answer = tExpression[i].getAnswer();
 		cout << "   Result: " << (isnan(the_answer) ? "N/A" : to_string(the_answer)) << endl;
-		cout << 
+		cout << "---------------------" << endl;
 	}
 
 

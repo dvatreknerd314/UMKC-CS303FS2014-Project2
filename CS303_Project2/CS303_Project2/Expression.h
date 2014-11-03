@@ -24,6 +24,9 @@ public:
 	//void showResult();
 	//friend std::ostream& operator<<(std::ostream& os, Expression mExpression);
 	//friend std::istream& operator>>(std::istream& is, Expression mExpression);
+	friend ostream& operator <<(ostream& os, const Expression& expression);
+	friend istream& operator >>(istream& is, Expression mExpression);
+	Expression operator= (Expression& rhs);
 private:
 	//bool error;
 	string exprString;

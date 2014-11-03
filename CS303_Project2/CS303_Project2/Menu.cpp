@@ -19,25 +19,53 @@ bool enterInputSource(Expression* tExpression, int& count, int& size);
 int main()
 {
 	//returns whether the expression was successfully entered
-	bool expressionSuccess = false;
-	//instantiates 50 expression objects
-	Expression tExpression[1000];
+	//bool expressionSuccess = false;	//11/2 don't need
+	
+	char userDone = 'n';	//11/2 added
+	
 	//counts the number of expressions being used
 	int count = 0;
+	
+	//initial size of dynamic array
+	size = 1000	// 11/2
+	 	
+	//instantiates 1000 expression objects
+//	Expression tExpression[1000];	// 11/2
+	
+	//instantiates dynamic array
+	Expression* expression = new Expression[size];
+
 
 	//user menu choice message
-	cout << "To enter an expression manually, type 'B'. To retrieve an expression or expressions from a file," 
-		<< " type 'A'. Enter 'E' to exit the program.\n";
+//	cout << "To enter an expression manually, type 'B'. To retrieve an expression or expressions from a file," 	//11/2changed format
+//		<< " type 'A'. Enter 'E' to exit the program.\n";
 
 	//looks for input as long as nothing has been input successfully
+	/*// 11/2 no longer needed
 	while (!expressionSuccess)
 	{
 		expressionSuccess = enterInputSource(tExpression, count);
 	}
-
+	*/
 	
-	cout << "Results: \n";
+		//gets expressions from user or from file		// 11/2 added
+	while (userDone == 'N' || userDone == 'n')
+	{
+		//asks for user input
+		cout << "To enter an expression manually, type 'A'." << endl
+			<< "To retrieve from a file, type 'B'."
+			<< endl << "Enter 'E' to exit the program.\n";
+		chooseInput(expression, count, size);
 
+		cout << "Are you done entering expressions? Y or N" << endl;
+		cin >> userDone;
+
+	}
+	
+	
+//	cout << "Results: \n";	//11/2
+
+/*	11/2 now in enterFromFile and enterFromKeys
 	for (int i = 0; i < count; i++)
 	{
 		//cout << "Expression #" << i << ":  " << tExpression[i] << endl << "   Result: " << tExpression[i] << endl;
@@ -46,7 +74,9 @@ int main()
 		cout << "   Result: " << (isnan(the_answer) ? "N/A" : to_string(the_answer)) << endl;
 		cout << "---------------------" << endl;
 	}
-
+	*/
+	
+	delete [] expression;	// 11/2 deletes dynamic array
 
 	system("pause");
 
@@ -91,14 +121,18 @@ void enterFromFile(Expression* tExpression, int& count)
 		fin.getline(fileInput, 80);
 		
 		//outputs expression and result new to errors
-		cout << endl << "Expression #" << count + 1 << ": " << tExpression[count].getString() << endl;	//11/2
+		cout << endl << "Expression #" << count + 1 << ":  " << tExpression[count].getString() << endl;	//11/2
 		
 		//inputs expression and calculates answer
 		tExpression[count].set(string(fileInput));
 		
+		double the_answer = tExpression[count].getAnswer();
+		
 		//outputs result 
 		cout << setw(4) << "";
-		cout << "Result: " << tExpression[count].getAnswer() << endl << endl;
+		cout << "Result: " << (isnan(the_answer) ? "N/A" : to_string(the_answer)) << endl;
+		cout << "---------------------" << endl;
+
 
 		count++;
 	}
@@ -126,10 +160,18 @@ void enterFromKeys(Expression* tExpression, int& count, int&size //11/2 added)
 		
 		//11/2 outputs expression number and expression itself to the window -- expression doesn't currently output
 		cout << endl << "Expression #" << count + 1 << ": " << tExpression[count].getString() << endl;
-		
+
 		
 		//put value in new element
 		tExpression[count].set(userInput);
+
+		double the_answer = tExpression[count].getAnswer();
+		
+		//outputs result 
+		cout << setw(4) << "";
+		cout << "Result: " << (isnan(the_answer) ? "N/A" : to_string(the_answer)) << endl;
+		cout << "---------------------" << endl;
+		
 		
 		out << setw(4) << "";		// 11/2 outputs result next to errors
 		cout << "Result: " << tExpression[count].getAnswer() << endl << endl;	//11/2
@@ -165,5 +207,5 @@ bool enterInputSource(Expression* tExpression, int& count, int& size//added 11/2
 
 }
 
-// 11/2: need to output string expression with results. it's not working right now.
+// 11/2: need to output string expression with results. as of now, expression doesn't output.
 // also make array dynamic

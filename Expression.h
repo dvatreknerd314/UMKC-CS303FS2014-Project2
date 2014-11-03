@@ -6,7 +6,6 @@
 #pragma once
 #include"Evaluator.h"
 #include<iostream>
-//#include<list>
 using namespace std;
 
 
@@ -21,9 +20,6 @@ public:
 	void set(string hString);
 	double getAnswer();
 	string getString();
-	//void showResult();
-	//friend std::ostream& operator<<(std::ostream& os, Expression mExpression);
-	//friend std::istream& operator>>(std::istream& is, Expression mExpression);
 	friend ostream& operator <<(ostream& os, const Expression& expression);
 	friend istream& operator >>(istream& is, Expression mExpression);
 	Expression operator= (Expression& rhs);

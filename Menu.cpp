@@ -15,7 +15,7 @@ void enterFromKeys(Expression* tExpression, int& count, int& size);
 bool enterInputSource(Expression* tExpression, int& count, int& size);
 
 //An expression should contain fewer than 80 characters
-//Only 100 or fewer expressions may be entered
+//Only 500 or fewer expressions may be entered
 
 int main()
 {
@@ -25,7 +25,7 @@ int main()
 	int count = 0;
 	
 	//initial size of dynamic array
-	int size = 100;	
+	int size = 500;	
 	
 	//instantiates dynamic array
 	Expression* expression = new Expression[size];

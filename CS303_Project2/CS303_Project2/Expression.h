@@ -31,7 +31,7 @@ private:
 	//bool error;
 	string exprString;
 	//string errorMessage;
-	int answer;
+	double answer;
 
 };
 

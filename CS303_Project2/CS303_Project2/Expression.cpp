@@ -7,6 +7,11 @@
 #include "Expression.h"
 
 //
+Expression::Expression()
+{
+	
+}
+
 Expression::Expression(std::string inputString)
 {
 	exprString = inputString;

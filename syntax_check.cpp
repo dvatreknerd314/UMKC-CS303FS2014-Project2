@@ -662,7 +662,7 @@ int SyntaxChecker::return_error(int index, string expression, char token, int fo
 			cout << "Incomplete multi-character operator found at index " << index << endl;
 			break;
 		case 11:
-			cout << "No valid left hand side operand for the != operator at character " << index << endl;
+			cout << "No valid left hand side operand for the != operator" << endl << setw(4) << "" << left << setw(10) << "" << "at character " << index << endl;
 			break;
 		case 6:
 		case 7:

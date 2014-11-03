@@ -77,6 +77,7 @@ int main()
 	}
 	*/
 	
+
 	delete [] expression;	// 11/2 deletes dynamic array
 
 	system("pause");

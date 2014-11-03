@@ -99,7 +99,7 @@ void enterFromFile(Expression* tExpression, int& count, int& size)
 	cin >> fileName;
 	fin.open(fileName);
 
-	while (!fin.good())
+	while (!fin.eof())
 	{
 		cout << "Invalid file name. Please re-enter the file name, or type 'M' to return to the main menu.\n";
 

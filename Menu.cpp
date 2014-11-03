@@ -35,19 +35,6 @@ int main()
 	
 	//instantiates dynamic array
 	Expression* expression = new Expression[size];
-
-
-	//user menu choice message
-//	cout << "To enter an expression manually, type 'B'. To retrieve an expression or expressions from a file," 	//11/2changed format
-//		<< " type 'A'. Enter 'E' to exit the program.\n";
-
-	//looks for input as long as nothing has been input successfully
-	/*// 11/2 no longer needed
-	while (!expressionSuccess)
-	{
-		expressionSuccess = enterInputSource(tExpression, count);
-	}
-	*/
 	
 		//gets expressions from user or from file		// 11/2 added
 	while (userDone == 'N' || userDone == 'n')
@@ -61,20 +48,6 @@ int main()
 		cout << "Are you done entering expressions? Y or N" << endl;
 		cin >> userDone;
 	}
-	
-	
-//	cout << "Results: \n";	//11/2
-
-/*	11/2 now in enterFromFile and enterFromKeys
-	for (int i = 0; i < count; i++)
-	{
-		//cout << "Expression #" << i << ":  " << tExpression[i] << endl << "   Result: " << tExpression[i] << endl;
-		cout << "Expression #" << i << ":  " << tExpression[i].getString() << endl;
-		double the_answer = tExpression[i].getAnswer();
-		cout << "   Result: " << (isnan(the_answer) ? "N/A" : to_string(the_answer)) << endl;
-		cout << "---------------------" << endl;
-	}
-	*/
 	
 
 	delete [] expression;	// 11/2 deletes dynamic array
@@ -176,13 +149,6 @@ void enterFromKeys(Expression* tExpression, int& count, int&size) //11/2 added)
 	//	cout << "Result: " << tExpression[count].getAnswer() << endl << endl;	//11/2
 		
 		count++;
-
-/*11/2 commented out this stuff
-		cout << "Would you like to enter another expression? Enter Y for YES or N for NO.\n";
-		cin >> yOrN;
-
-	} while (yOrN == 'y' || yOrN == 'Y');
-*/
 
 	return;
 }

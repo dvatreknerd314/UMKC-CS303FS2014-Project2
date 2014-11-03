@@ -14,29 +14,24 @@ void enterFromFile(Expression* tExpression, int& count, int& size);
 void enterFromKeys(Expression* tExpression, int& count, int& size);
 bool enterInputSource(Expression* tExpression, int& count, int& size);
 
-//I that fewer than 80 characters would be entered in an expression
-//Only 50 or fewer expressions may be entered
+//An expression should contain fewer than 80 characters
+//Only 100 or fewer expressions may be entered
 
 int main()
 {
-	//returns whether the expression was successfully entered
-	//bool expressionSuccess = false;	//11/2 don't need
-	
-	char userDone = 'n';	//11/2 added
+	char userDone = 'n';	
 	
 	//counts the number of expressions being used
 	int count = 0;
 	
 	//initial size of dynamic array
-	int size = 1000;	// 11/2
-	 	
-	//instantiates 1000 expression objects
-//	Expression tExpression[1000];	// 11/2
+	int size = 100;	
 	
 	//instantiates dynamic array
 	Expression* expression = new Expression[size];
 	
-		//gets expressions from user or from file		// 11/2 added
+	//starts automatically
+	//repeats as long as the user enters n or N
 	while (userDone == 'N' || userDone == 'n')
 	{
 		//asks for user input
@@ -50,7 +45,7 @@ int main()
 	}
 	
 
-	delete [] expression;	// 11/2 deletes dynamic array
+	delete [] expression;	
 
 	system("pause");
 
@@ -113,21 +108,16 @@ void enterFromFile(Expression* tExpression, int& count, int& size)
 
 
 	fin.close();
-	//don't forget to grab the expression.
 }
 
-void enterFromKeys(Expression* tExpression, int& count, int&size) //11/2 added)
+void enterFromKeys(Expression* tExpression, int& count, int&size)
 {
-//	char yOrN = 'y';	//see below
-
-//11/2 	do			//see below
-//11/2	{
 		string userInput;
 
-//11/2		cout << "Enter an expression. Make sure the expressions contains only mathematical symbols, digits, and spaces.\n";
 
 		cout << "Enter an expression. Make sure the expressions contains " << endl	//11/2 changed output 
 			<< "only mathematical symbols, digits, and spaces." << endl;		//expression format
+			
 		//get expression from user	
 		getline(cin, userInput);
 		
@@ -144,21 +134,17 @@ void enterFromKeys(Expression* tExpression, int& count, int&size) //11/2 added)
 		cout << "Result: " << (isnan(the_answer) ? "N/A" : to_string(the_answer)) << endl;
 		cout << "---------------------" << endl;
 		
-		
-	//	cout << setw(4) << "";		// 11/2 outputs result next to errors
-	//	cout << "Result: " << tExpression[count].getAnswer() << endl << endl;	//11/2
-		
 		count++;
 
 	return;
 }
 
-bool enterInputSource(Expression* tExpression, int& count, int& size)//added 11/2)
+//gets user input to determine input source
+bool enterInputSource(Expression* tExpression, int& count, int& size)
 {
 	char inputSource;
 	cin >> inputSource;
 	cin.get();
-
 
 	switch (inputSource)
 	{
@@ -173,6 +159,4 @@ bool enterInputSource(Expression* tExpression, int& count, int& size)//added 11/
 
 }
 
-// 11/2: need to output string expression with results. as of now, expression doesn't output.
-// also make array dynamic
 //I also need to set precision

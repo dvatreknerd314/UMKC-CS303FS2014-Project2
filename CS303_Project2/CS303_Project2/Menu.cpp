@@ -10,8 +10,8 @@
 #include"Expression.h"
 using namespace std;
 
-void enterFromFile(Expression* tExpression, int& count);
-void enterFromKeys(Expression* tExpression, int& count);
+void enterFromFile(Expression* tExpression, int& count, int& size);
+void enterFromKeys(Expression* tExpression, int& count, int& size);
 bool enterInputSource(Expression* tExpression, int& count, int& size);
 
 //I that fewer than 80 characters would be entered in an expression

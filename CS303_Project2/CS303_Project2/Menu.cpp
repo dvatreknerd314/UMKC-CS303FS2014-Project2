@@ -85,7 +85,7 @@ int main()
 	return 0;
 }
 
-void enterFromFile(Expression* tExpression, int& count)
+void enterFromFile(Expression* tExpression, int& count, int& size)
 {
 	//input file
 	ifstream fin;

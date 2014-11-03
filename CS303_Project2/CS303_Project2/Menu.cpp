@@ -174,8 +174,8 @@ void enterFromKeys(Expression* tExpression, int& count, int&size) //11/2 added)
 		cout << "---------------------" << endl;
 		
 		
-		cout << setw(4) << "";		// 11/2 outputs result next to errors
-		cout << "Result: " << tExpression[count].getAnswer() << endl << endl;	//11/2
+	//	cout << setw(4) << "";		// 11/2 outputs result next to errors
+	//	cout << "Result: " << tExpression[count].getAnswer() << endl << endl;	//11/2
 		
 		count++;
 

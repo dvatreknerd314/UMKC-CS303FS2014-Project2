@@ -210,3 +210,4 @@ bool enterInputSource(Expression* tExpression, int& count, int& size)//added 11/
 
 // 11/2: need to output string expression with results. as of now, expression doesn't output.
 // also make array dynamic
+//I also need to set precision

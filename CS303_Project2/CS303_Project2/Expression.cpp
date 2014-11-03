@@ -5,6 +5,7 @@
 //CS 303 FS 2014 UMKC
 
 #include "Expression.h"
+#include "Evaluator.h"
 
 //
 Expression::Expression()

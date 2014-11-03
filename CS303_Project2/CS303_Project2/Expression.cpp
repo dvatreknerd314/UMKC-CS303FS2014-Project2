@@ -1,5 +1,6 @@
 //Gretchen Gilbreath
 //October 25, 2014
+//More edits: November 2, 2014
 //Project 2
 //CS 303 FS 2014 UMKC
 
@@ -19,9 +20,10 @@ Expression::~Expression()
 //what happens if NULL is returned, will it mess up the menu?
 double Expression::getAnswer()
 {
-	Expression tempExpr;
+	//Expression tempExpr;
 	//return tempExpr.evaluate_expression(exprString);
-	return evaluate_expression(exprString);
+	//return evaluate_expression(exprString);
+	return exprString;
 }
 
 /*
@@ -53,6 +55,7 @@ std::istream& operator>>(std::istream& is, Expression mExpression)
 void Expression::set(string hString)
 {
 	exprString = hString;
+	answer = evaluate_expression(exprString);
 }
 
 /*
@@ -73,4 +76,32 @@ void Expression::evaluate()
 string Expression::getString()
 {
 	return exprString;
+}
+
+
+ostream& operator <<(ostream& os, const Expression& expression)
+{
+	for (int i = 0; i < expression.exprString.size(); i++)
+	{
+		if (expression.exprString[i] != ' ')
+			os << i;
+	}
+	return os;
+}
+
+istream& operator>>(istream& is, Expression mExpression)
+{
+	is >> mExpression.exprString;
+
+	mExpression.answer = evaluate_expression(mExpression.exprString);
+
+	return is;
+}
+
+Expression Expression::operator= (Expression& rhs)
+{
+	Expression tempExp;
+	tempExp.exprString = rhs.exprString;
+	tempExp.answer = evaluate_expression(exprString);
+	return tempExp;
 }

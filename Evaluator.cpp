@@ -57,7 +57,7 @@ bool isClose(syntax_status text)
 }
 
 //This processes a an operator with a rhs and lhs argument
-int process(double lhs, double rhs, syntax_status oper)
+double process(double lhs, double rhs, syntax_status oper)
 {
 	if (oper == PLUS) {
 		return lhs + rhs;
@@ -127,7 +127,6 @@ double evaluate_expression(string& input)
 	syntax_status oper; //this is for passing into the function process
 	stack<double> operands; //Operand stack
 	stack<syntax_status> operators; //Operator stack
-
 	list<exprToken> expression; //Here's the list we need to pass into syntax_check
 
 	//Here we pass in the expression to see if it passes the test

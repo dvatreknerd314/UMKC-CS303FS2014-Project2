@@ -11,9 +11,9 @@ using namespace std;
 
 void enterFromFile(Expression* tExpression, int& count);
 void enterFromKeys(Expression* tExpression, int& count);
-bool enterInputSource(Expression* tExpression, int& count);
+bool enterInputSource(Expression* tExpression, int& count, int& size);
 
-//I assumed up to 100 characters could be entered in an expression
+//I that fewer than 80 characters would be entered in an expression
 //Only 50 or fewer expressions may be entered
 
 int main()
@@ -56,11 +56,15 @@ int main()
 
 void enterFromFile(Expression* tExpression, int& count)
 {
+	//input file
 	ifstream fin;
+	//user given name of input file
 	string fileName;
 
 
 	cout << "Enter the name of the file to open.\n";
+	
+	//get file name from user and open it
 	cin >> fileName;
 	fin.open(fileName);
 
@@ -78,14 +82,24 @@ void enterFromFile(Expression* tExpression, int& count)
 	}
 
 
-	//allows user to enter up to 100 characters
-	char fileInput[100];
+	//allows user to enter up to 80 characters
+	char fileInput[80];
 
 	//goes through file as long as there is information available
 	while (!fin.eof() && count < 1000)
 	{
-		fin.getline(fileInput, 100);
+		fin.getline(fileInput, 80);
+		
+		//outputs expression and result new to errors
+		cout << endl << "Expression #" << count + 1 << ": " << tExpression[count].getString() << endl;	//11/2
+		
+		//inputs expression and calculates answer
 		tExpression[count].set(string(fileInput));
+		
+		//outputs result 
+		cout << setw(4) << "";
+		cout << "Result: " << tExpression[count].getAnswer() << endl << endl;
+
 		count++;
 	}
 
@@ -94,30 +108,45 @@ void enterFromFile(Expression* tExpression, int& count)
 	//don't forget to grab the expression.
 }
 
-void enterFromKeys(Expression* tExpression, int& count)
+void enterFromKeys(Expression* tExpression, int& count, int&size //11/2 added)
 {
-	char yOrN = 'y';
+//	char yOrN = 'y';	//see below
 
-	do
-	{
+//11/2 	do			//see below
+//11/2	{
 		string userInput;
 
-		cout << "Enter an expression. Make sure the expressions contains only mathematical symbols, digits, and spaces.\n";
+//11/2		cout << "Enter an expression. Make sure the expressions contains only mathematical symbols, digits, and spaces.\n";
 
+		cout << "Enter an expression. Make sure the expressions contains " << endl	//11/2 changed output 
+			<< "only mathematical symbols, digits, and spaces." << endl;		//expression format
+		
+		//get expression from user	
 		cin >> userInput;
-
+		
+		//11/2 outputs expression number and expression itself to the window -- expression doesn't currently output
+		cout << endl << "Expression #" << count + 1 << ": " << tExpression[count].getString() << endl;
+		
+		
+		//put value in new element
 		tExpression[count].set(userInput);
+		
+		out << setw(4) << "";		// 11/2 outputs result next to errors
+		cout << "Result: " << tExpression[count].getAnswer() << endl << endl;	//11/2
+		
 		count++;
 
+/*11/2 commented out this stuff
 		cout << "Would you like to enter another expression? Enter Y for YES or N for NO.\n";
 		cin >> yOrN;
 
 	} while (yOrN == 'y' || yOrN == 'Y');
+*/
 
 	return;
 }
 
-bool enterInputSource(Expression* tExpression, int& count)
+bool enterInputSource(Expression* tExpression, int& count, int& size//added 11/2)
 {
 	char inputSource;
 	cin >> inputSource;
@@ -135,3 +164,6 @@ bool enterInputSource(Expression* tExpression, int& count)
 	}
 
 }
+
+// 11/2: need to output string expression with results. it's not working right now.
+// also make array dynamic

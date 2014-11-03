@@ -14,7 +14,7 @@ class Expression
 {
 public:
 	//default constructor
-	Expression(){ answer = 0; }
+	Expression();
 	Expression(std::string inputString);
 	~Expression();
 	//void evaluate();

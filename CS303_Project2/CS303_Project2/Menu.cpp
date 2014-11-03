@@ -6,6 +6,7 @@
 #include<iostream>
 #include<fstream>
 #include<string>
+#include<iomanip>
 #include"Expression.h"
 using namespace std;
 
@@ -27,7 +28,7 @@ int main()
 	int count = 0;
 	
 	//initial size of dynamic array
-	size = 1000	// 11/2
+	int size = 1000;	// 11/2
 	 	
 	//instantiates 1000 expression objects
 //	Expression tExpression[1000];	// 11/2
@@ -55,7 +56,7 @@ int main()
 		cout << "To enter an expression manually, type 'A'." << endl
 			<< "To retrieve from a file, type 'B'."
 			<< endl << "Enter 'E' to exit the program.\n";
-		chooseInput(expression, count, size);
+		enterInputSource(expression, count, size);
 
 		cout << "Are you done entering expressions? Y or N" << endl;
 		cin >> userDone;
@@ -142,7 +143,7 @@ void enterFromFile(Expression* tExpression, int& count)
 	//don't forget to grab the expression.
 }
 
-void enterFromKeys(Expression* tExpression, int& count, int&size //11/2 added)
+void enterFromKeys(Expression* tExpression, int& count, int&size) //11/2 added)
 {
 //	char yOrN = 'y';	//see below
 
@@ -173,7 +174,7 @@ void enterFromKeys(Expression* tExpression, int& count, int&size //11/2 added)
 		cout << "---------------------" << endl;
 		
 		
-		out << setw(4) << "";		// 11/2 outputs result next to errors
+		cout << setw(4) << "";		// 11/2 outputs result next to errors
 		cout << "Result: " << tExpression[count].getAnswer() << endl << endl;	//11/2
 		
 		count++;
@@ -188,7 +189,7 @@ void enterFromKeys(Expression* tExpression, int& count, int&size //11/2 added)
 	return;
 }
 
-bool enterInputSource(Expression* tExpression, int& count, int& size//added 11/2)
+bool enterInputSource(Expression* tExpression, int& count, int& size)//added 11/2)
 {
 	char inputSource;
 	cin >> inputSource;

@@ -60,7 +60,6 @@ int main()
 
 		cout << "Are you done entering expressions? Y or N" << endl;
 		cin >> userDone;
-
 	}
 	
 	
@@ -156,14 +155,12 @@ void enterFromKeys(Expression* tExpression, int& count, int&size) //11/2 added)
 
 		cout << "Enter an expression. Make sure the expressions contains " << endl	//11/2 changed output 
 			<< "only mathematical symbols, digits, and spaces." << endl;		//expression format
-		
 		//get expression from user	
-		cin >> userInput;
+		getline(cin, userInput);
 		
 		//11/2 outputs expression number and expression itself to the window -- expression doesn't currently output
 		cout << endl << "Expression #" << count + 1 << ": " << tExpression[count].getString() << endl;
 
-		
 		//put value in new element
 		tExpression[count].set(userInput);
 
@@ -194,6 +191,7 @@ bool enterInputSource(Expression* tExpression, int& count, int& size)//added 11/
 {
 	char inputSource;
 	cin >> inputSource;
+	cin.get();
 
 
 	switch (inputSource)

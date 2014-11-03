@@ -569,7 +569,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 				paren_count--;
 				// If there are too many closing parenthesis, error
 				if (paren_count < 0) {
-					return return_error(i, the_input, NULL, 4);
+					return return_error(i, the_input, '3', 4);
 				}
 				// Return an error code for invalid end of enclosed expression if such is true
 				// This will also error if we have an incomplete dual character operator
@@ -592,7 +592,7 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 				theList.push_back(tempToken);
 				break;
 			default:
-				return return_error(i, the_input, NULL, 3);
+				return return_error(i, the_input, '3', 3);
 		}
 	}
 	
@@ -600,11 +600,11 @@ int SyntaxChecker::syntax_check(string the_input, list<exprToken>& theList) {
 	
 	// We've ended with an operator, inside or outside a closing parenthesis.
 	if (the_status != DIGIT && the_status != NONE) {
-		return return_error(the_input.length(), the_input, NULL, 2);
+		return return_error(the_input.length()-1, the_input, NULL, 2);
 	}
 	
 	// We have more opening parenthesis than closing, so error
-	else if (paren_count) { return return_error(the_input.length(), the_input, NULL, 1); }
+	else if (paren_count) { return return_error(the_input.length()-1, the_input, NULL, 1); }
 
 	// If our last token was a number and not a closing parenthesis, add the
 	// number to theList
@@ -666,19 +666,19 @@ int SyntaxChecker::return_error(int index, string expression, char token, int fo
 			break;
 		case 6:
 		case 7:
-			cout << "Unexpected number or parenthetical value at character " << index << ", expected an operator" << endl;
+			cout << "Unexpected number or parenthetical value" << endl << setw(14) << "" << "at character " << index << ", expected an operator" << endl;
 			break;
 		case 5:
-			cout << "No valid expression contained within the parenthesis ending at character " << index << endl;
+			cout << "No valid expression contained within the parenthesis" << endl << setw(14) << "" << "ending at character " << index << endl;
 			break;
 		case 8:
 		case 9:
 		case 10:
-			cout << "No valid left hand side operator for the " << token << token << " operator at character " << index << endl;
+			cout << "No valid left hand side operator for the " << token << token << " operator" << endl << setw(14) << "" << "at character " << index << endl;
 			break;
 		case 13:
 		case 14:
-			cout << "No valid left hand side operator for the " << token << " or " << token << "= operator at character " << index << endl;
+			cout << "No valid left hand side operator for the " << token << " or " << token << "= operator" << endl << setw(14) << "" << "at character " << index << endl;
 			break;
 		case 15:
 		case 16:
@@ -694,7 +694,7 @@ int SyntaxChecker::return_error(int index, string expression, char token, int fo
 
 	cout << setw(4) << "";
 	cout << left << setw(10) << "Location: ";
-	for (int i = 1; i < index; i++)
+	for (int i = 0; i < index; i++)
 	{
 		cout << "_";
 	}

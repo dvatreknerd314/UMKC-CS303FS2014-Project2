@@ -135,6 +135,10 @@ double evaluate_expression(string& input)
 	{
 		return numeric_limits<double>::quiet_NaN(); //if the input is invalid, return NaN
 	}
+	if (expression.size() == 0)
+	{
+		return numeric_limits<double>::quiet_NaN();
+	}
 
 	//Iterate through the list of tokens
 	for (list<exprToken>::iterator itr = expression.begin(); itr != expression.end(); ++itr)

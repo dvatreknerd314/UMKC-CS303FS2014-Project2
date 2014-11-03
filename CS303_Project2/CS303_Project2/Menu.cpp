@@ -198,9 +198,9 @@ bool enterInputSource(Expression* tExpression, int& count, int& size)//added 11/
 	switch (inputSource)
 	{
 	case 'A':
-	case 'a': enterFromFile(tExpression, count); return true;  break;
+	case 'a': enterFromFile(tExpression, count, size); return true;  break;
 	case 'B':
-	case 'b': enterFromKeys(tExpression, count); return true; break;
+	case 'b': enterFromKeys(tExpression, count, size); return true; break;
 	case 'E':
 	case 'e': return true;  break;	//exit from here
 	default: cout << "Invalid option. Please choose again.\n"; break;
